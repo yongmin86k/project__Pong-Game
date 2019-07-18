@@ -166,23 +166,3 @@ h1 {
   margin-bottom: 1rem;
   text-align: center;
 }
-
-/**
-* SVGs 
-*/
-#board {
-  fill: #353535;
-}
-#net {
-  stroke-width: 2;
-  stroke: white;
-  stroke-dasharray: 16,34;
-  stroke-dashoffset: 4;
-  fill: none;
-}
-#paddle {
-  fill: white;
-}
-#ball {
-  fill: white;
-}
