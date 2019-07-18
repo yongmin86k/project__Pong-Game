@@ -27,10 +27,12 @@ export default class Paddle {
     }
 
     up(){
+        // move the paddle up but not above the top of the board
         this.y = Math.max( this.y - this.speed, 0 );
     }
 
     down(){
+        // move the paddle down but not more than the bottom of the board
         this.y = Math.min( this.y + this.speed, (this.boardHeight - this.height) );
     }
     

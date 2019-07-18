@@ -1,4 +1,4 @@
-import { SVG_NS, KEYS } from "../settings";
+import { SVG_NS, KEYS, PaddleOptions } from "../settings";
 import Board from "./Board";
 import Paddle from "./Paddle";
 
@@ -14,29 +14,24 @@ export default class Game {
     // create new object for the board and net with same size of the SVG container
     this.board = new Board(this.width, this.height);
 
-    // properties of Paddle
-    this.paddleWidth = 8;
-    this.paddleHeight = 56;
-    this.boardGap = 10;
-
     // create new paddles for the each players
     this.player1 = new Paddle(
       this.height,
-      this.paddleWidth,
-      this.paddleHeight,
-      this.boardGap,
-      ((this.height - this.paddleHeight) / 2),
-      '#FF0000',
+      PaddleOptions.paddleWidth,
+      PaddleOptions.paddleHeight,
+      PaddleOptions.boardGap,
+      ((this.height - PaddleOptions.paddleHeight) / 2),
+      PaddleOptions.player1Color,
       KEYS.a,
       KEYS.z,
     );
     this.player2 = new Paddle(
       this.height,
-      this.paddleWidth,
-      this.paddleHeight,
-      this.width - (this.paddleWidth + this.boardGap),
-      ((this.height - this.paddleHeight) / 2),
-      '#00FFFF',
+      PaddleOptions.paddleWidth,
+      PaddleOptions.paddleHeight,
+      this.width - (PaddleOptions.paddleWidth + PaddleOptions.boardGap),
+      ((this.height - PaddleOptions.paddleHeight) / 2),
+      PaddleOptions.player2Color,
       KEYS.up,
       KEYS.down,
     );
