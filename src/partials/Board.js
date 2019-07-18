@@ -23,7 +23,7 @@ export default class Board {
         line.setAttributeNS(null, 'stroke-dasharray', [16, 34]);
         line.setAttributeNS(null, 'stroke-dashoffset', 4);
 
-        // create SVG of rect and line
+        // append SVG of rect and line into './Game.js'
         svg.appendChild(rect);
         svg.appendChild(line);
     }
