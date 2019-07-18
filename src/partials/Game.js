@@ -1,6 +1,7 @@
-import { SVG_NS, KEYS, PaddleOptions } from "../settings";
+import { SVG_NS, KEYS, PaddleOptions, BallOptions } from "../settings";
 import Board from "./Board";
 import Paddle from "./Paddle";
+import Ball from "./Ball";
 
 export default class Game {
   constructor(element, width, height) {
@@ -11,7 +12,7 @@ export default class Game {
     // create SVG container
     this.gameElement = document.getElementById(this.element);
     
-    // create new object for the board and net with same size of the SVG container
+    // create a new object for the board and net with same size of the SVG container
     this.board = new Board(this.width, this.height);
 
     // create new paddles for the each players
@@ -35,6 +36,14 @@ export default class Game {
       KEYS.up,
       KEYS.down,
     );
+
+    // create a new ball for the game
+    this.ball = new Ball(
+      BallOptions.ballSize,
+      BallOptions.ballColor,
+      this.width,
+      this.height
+    );
   }
 
   render() {
@@ -52,5 +61,8 @@ export default class Game {
     // Render the paddles
     this.player1.render(svg);
     this.player2.render(svg);
+
+    // Render the ball
+    this.ball.render(svg);
   }
 }

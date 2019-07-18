@@ -9,12 +9,17 @@ export const KEYS = {
     spaceBar: ' ', // we'll use this later...
   }
 
-//
+// properties of Paddle
 export const PaddleOptions = {
-    // properties of Paddle
     paddleWidth : 8,
     paddleHeight : 56,
     boardGap : 10,
     player1Color: '#FF0000',
     player2Color: '#00FFFF',
+}
+
+// properties of Ball
+export const BallOptions = {
+    ballSize: 8,
+    ballColor: '#FFFFFF'
 }
