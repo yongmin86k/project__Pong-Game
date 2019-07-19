@@ -1,28 +1,25 @@
-import { SVG_NS } from "../settings";
+import { SVG_NS, KEYS, PaddleOptions } from "../settings";
 
 export default class Paddle {
-    constructor(boardHeight, width, height, x, y, color = '#FFFFFF', up, down) {
+    constructor(boardHeight, width, height, x, y, color = '#FFFFFF', upKey, downKey) {
         this.boardHeight = boardHeight;
         this.width = width;
         this.height = height;
         this.x = x;
         this.y = y;
-        this.speed = 10;
+        this.speed = PaddleOptions.speed;
         this.score = 0;
         this.color = color;
+        this.upKey = upKey;
+        this.downKey = downKey;
 
-        // add KeyListener
-        document.addEventListener("keydown", event => {
-            switch (event.key) {
-                case up:
-                    this.up();
-                    console.log("up", this.y);
-                    break;
-                case down:
-                    this.down();
-                    console.log("down", this.y);
-                    break;
-            }
+        this.keyState = {}; // update which keys are pressing
+
+        document.addEventListener('keydown', event => {
+            this.keyState[event.key] = true;
+        });
+        document.addEventListener('keyup', event => {
+            this.keyState[event.key] = false;
         });
     }
 
@@ -37,6 +34,20 @@ export default class Paddle {
     }
     
     render(svg) {
+        // smoothen movement of paddles
+        if (this.keyState[KEYS.a] && this.upKey === KEYS.a ) {
+            this.up();
+        }
+        if (this.keyState[KEYS.z] && this.downKey === KEYS.z ) {
+            this.down();
+        }
+        if (this.keyState[KEYS.up] && this.upKey === KEYS.up ) {
+            this.up();
+        }
+        if (this.keyState[KEYS.down] && this.downKey === KEYS.down ) {
+            this.down();
+        }
+
         // create SVG of rect
         let rect = document.createElementNS(SVG_NS, 'rect');
         rect.setAttributeNS(null, 'fill', this.color);

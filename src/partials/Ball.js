@@ -1,5 +1,4 @@
 import { SVG_NS } from "../settings";
-import { basename } from "path";
 
 export default class Ball {
     constructor(radius, color = '#FFFFFF', boardWidth, boardHeight) {
@@ -8,9 +7,9 @@ export default class Ball {
       this.boardWidth = boardWidth;
       this.boardHeight = boardHeight;
       this.direction = 1;
-
+      
       this.reset();
-    }
+    } // end of constructor
 
     reset(){
       this.x = this.boardWidth / 2;

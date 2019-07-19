@@ -44,9 +44,23 @@ export default class Game {
       this.width,
       this.height
     );
-  }
+
+    document.addEventListener('keydown', event => {
+      switch(event.key){
+        case KEYS.spaceBar:
+          this.pause = !this.pause;
+          break;
+      }
+    });
+
+  } // end of constructor
 
   render() {
+
+    if (this.pause) { // if pause === true, render stop
+      return
+    }
+
     // properties for SVG tag
     this.gameElement.innerHTML = ''; // Clear the html before appending to fix a render bug 👾
     let svg = document.createElementNS(SVG_NS, "svg");

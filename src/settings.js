@@ -16,6 +16,7 @@ export const PaddleOptions = {
     boardGap : 10,
     player1Color: '#FF0000',
     player2Color: '#00FFFF',
+    speed: 10,
 }
 
 // properties of Ball
