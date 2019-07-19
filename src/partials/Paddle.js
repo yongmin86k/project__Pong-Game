@@ -21,7 +21,7 @@ export default class Paddle {
         document.addEventListener('keyup', event => {
             this.keyState[event.key] = false;
         });
-    }
+    } // end of constructor
 
     up(){
         // move the paddle up but not above the top of the board

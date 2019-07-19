@@ -2,6 +2,7 @@ import Board from "./Board";
 import Paddle from "./Paddle";
 import Ball from "./Ball";
 import { SVG_NS, KEYS, PaddleOptions, BallOptions } from "../settings";
+import { clearScreenDown } from "readline";
 
 export default class Game {
   constructor(element, width, height) {
@@ -77,6 +78,7 @@ export default class Game {
     this.player2.render(svg);
 
     // Render the ball
-    this.ball.render(svg);
+    this.ball.render(svg, this.player1, this.player2);
+    
   }
 }

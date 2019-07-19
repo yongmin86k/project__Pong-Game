@@ -4,7 +4,8 @@ export default class Board {
     constructor(width, height) {
       this.width = width;
       this.height = height;
-    }
+    } // end of constructor
+    
     render(svg) {
       // create SVG of rect and line
         let rect = document.createElementNS(SVG_NS, 'rect');

@@ -13,6 +13,7 @@ export const KEYS = {
 export const PaddleOptions = {
     paddleWidth : 8,
     paddleHeight : 56,
+    // paddleHeight : 256,
     boardGap : 10,
     player1Color: '#FF0000',
     player2Color: '#00FFFF',
