@@ -1,4 +1,5 @@
 import { SVG_NS } from "../settings";
+import pingSound from "../../public/sounds/pong-01.wav";
 
 export default class Ball {
     constructor(radius, color = '#FFFFFF', boardWidth, boardHeight) {
@@ -7,6 +8,8 @@ export default class Ball {
       this.boardWidth = boardWidth;
       this.boardHeight = boardHeight;
       this.direction = 1;
+
+      this.ping = new Audio(pingSound);
       
       this.reset();
     } // end of constructor
@@ -42,6 +45,7 @@ export default class Ball {
           ){
             // if true then there's a collision
             this.vx *= -1;
+            this.ping.play(); // play the sound when paddle hits the ball
         }
 
       } else { // moving left
@@ -51,6 +55,7 @@ export default class Ball {
           (this.y >= player1.y && this.y <= player1.y + player1.height) 
           ){
             this.vx *= -1;
+            this.ping.play();
           }
       }
     }
