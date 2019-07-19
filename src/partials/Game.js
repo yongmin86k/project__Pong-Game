@@ -1,7 +1,7 @@
-import { SVG_NS, KEYS, PaddleOptions, BallOptions } from "../settings";
 import Board from "./Board";
 import Paddle from "./Paddle";
 import Ball from "./Ball";
+import { SVG_NS, KEYS, PaddleOptions, BallOptions } from "../settings";
 
 export default class Game {
   constructor(element, width, height) {
