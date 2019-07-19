@@ -17,10 +17,11 @@ export default class Ball {
       
       this.vy = 0;
       while(this.vy === 0){  // this.vy won't show 0 output
+      // this.vy = 0.1;
         this.vy = Math.floor(Math.random() * 10 - 5); // determines the angle of the ball
       } 
-      // this.vx = this.direction * (6 - Math.abs(this.vy));
-      this.vx = this.direction * 8; // determines the speed of the ball
+      this.vx = this.direction * (6 - Math.abs(this.vy));
+      // this.vx = this.direction * 2; // determines the speed of the ball
     }
 
     wallCollision(){
@@ -28,14 +29,7 @@ export default class Ball {
       const hitRight = this.x + this.radius >= this.boardWidth;
       const hitTop = this.y - this.radius <= 0;
       const hitBottom = this.y + this.radius >= this.boardHeight;
-      if (hitLeft || hitRight ){ 
-        this.vx *= -1;
-
-        //  the ball resets if the ball passes right or left edge the position
-        // this.reset();
-        // this.direction *= -1;
-
-       } // this.vx = -this.vx;
+      if (hitLeft || hitRight ){ this.vx *= -1; } // this.vx = -this.vx;
       if (hitTop || hitBottom ){ this.vy *= -1; }
     }
 
@@ -61,6 +55,11 @@ export default class Ball {
       }
     }
 
+    goal(player) {
+      player.score++;
+      this.reset();
+    }
+
     render(svg, player1, player2){
       // ball moves randomly when it resets
       this.x +=  this.vx;
@@ -76,5 +75,16 @@ export default class Ball {
         circle.setAttributeNS(null, 'cy', this.y);
 
         svg.appendChild(circle);
+
+        const rightGoal = this.x + this.radius >= this.boardWidth;
+        const leftGoal = this.x - this.radius <= 0;
+
+        if ( rightGoal ) {
+          this.goal(player1);
+          this.direction = 1;
+        } else if ( leftGoal ){
+          this.goal(player2);
+          this.direction = -1;
+        }
     }
 }

@@ -1,6 +1,7 @@
 import Board from "./Board";
 import Paddle from "./Paddle";
 import Ball from "./Ball";
+import Score from "./Score";
 import { SVG_NS, KEYS, PaddleOptions, BallOptions } from "../settings";
 import { clearScreenDown } from "readline";
 
@@ -38,13 +39,13 @@ export default class Game {
       KEYS.down,
     );
 
+    // create scores for players
+    this.score1 = new Score(this.width / 2 - 40, 40, 32);
+    this.score2 = new Score(this.width / 2 + 40, 40, 32);
+
     // create a new ball for the game
-    this.ball = new Ball(
-      BallOptions.ballSize,
-      BallOptions.ballColor,
-      this.width,
-      this.height
-    );
+    this.ball = new Ball( BallOptions.ballSize, BallOptions.ballColor, this.width, this.height );
+    // this.ball2 = new Ball( 12, 'cyan', this.width, this.height );
 
     document.addEventListener('keydown', event => {
       switch(event.key){
@@ -79,6 +80,10 @@ export default class Game {
 
     // Render the ball
     this.ball.render(svg, this.player1, this.player2);
+    // this.ball2.render(svg, this.player1, this.player2);
     
+    // Update scores
+    this.score1.render(svg, this.player1.score);
+    this.score2.render(svg, this.player2.score);
   }
 }
