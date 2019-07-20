@@ -1,12 +1,13 @@
-import { SVG_NS } from "../settings";
+import { SVG_NS, BallOptions } from "../settings";
 import pingSound from "../../public/sounds/pong-01.wav";
 
 export default class Ball {
-    constructor(radius, color = '#FFFFFF', boardWidth, boardHeight) {
-      this.radius = radius;
-      this.color = color;
+    constructor(index, boardWidth, boardHeight, radius = 8, color = '#FFFFFF') {
+      this.index = index;
       this.boardWidth = boardWidth;
       this.boardHeight = boardHeight;
+      this.radius = radius;
+      this.color = color;
       this.direction = 1;
 
       this.ping = new Audio(pingSound);
@@ -18,13 +19,16 @@ export default class Ball {
       this.x = this.boardWidth / 2;
       this.y = this.boardHeight / 2;
       
+      this.vx = 0;
       this.vy = 0;
-      while(this.vy === 0){  // this.vy won't show 0 output
-      // this.vy = 0.1;
-        this.vy = Math.floor(Math.random() * 10 - 5); // determines the angle of the ball
-      } 
-      this.vx = this.direction * (6 - Math.abs(this.vy));
-      // this.vx = this.direction * 2; // determines the speed of the ball
+      
+      // start the game with random direction of the ball
+      this.RandomDirection = [-1, 1];
+      while( this.vy < Math.abs(BallOptions.minSpeed) && this.vx < Math.abs(BallOptions.minSpeed) ){ 
+        this.vx = Math.max( Number((Math.random() * BallOptions.maxSpeed ).toFixed(2)), BallOptions.minSpeed ) * this.RandomDirection[Math.round(Math.random())];
+        this.vy = Math.max( Number((Math.random() * BallOptions.maxSpeed ).toFixed(2)), BallOptions.minSpeed ) * this.RandomDirection[Math.round(Math.random())];
+      }
+      console.log( `ball number: ${Number(this.index) + 1} | size: ${this.radius} | color: ${this.color} | speed: ${ Math.ceil( Math.abs(this.vx) + Math.abs(this.vy) ) / 2}`);
     }
 
     wallCollision(){
@@ -45,7 +49,7 @@ export default class Ball {
           ){
             // if true then there's a collision
             this.vx *= -1;
-            this.ping.play(); // play the sound when paddle hits the ball
+            this.ping.play(); // play the sound when paddle hits the ball          
         }
 
       } else { // moving left
@@ -66,14 +70,19 @@ export default class Ball {
     }
 
     render(svg, player1, player2){
-      // ball moves randomly when it resets
-      this.x +=  this.vx;
+      // initiate the ball moving
+      this.x += this.vx;
+      // this.x += this.vx;
       this.y += this.vy;
 
+      // bounce when the ball hits the walls
       this.wallCollision();
+
+      // reflect when the ball hits the paddle
       this.paddleCollision(player1, player2);
 
-        let circle = document.createElementNS(SVG_NS, 'circle');
+      // create a ball
+      let circle = document.createElementNS(SVG_NS, 'circle');
         circle.setAttributeNS(null, 'r', this.radius);
         circle.setAttributeNS(null, 'fill', this.color);
         circle.setAttributeNS(null, 'cx', this.x);
@@ -81,8 +90,9 @@ export default class Ball {
 
         svg.appendChild(circle);
 
-        const rightGoal = this.x + this.radius >= this.boardWidth;
-        const leftGoal = this.x - this.radius <= 0;
+        // change ball direction when a player scores
+      const rightGoal = this.x + this.radius >= this.boardWidth;
+      const leftGoal = this.x - this.radius <= 0;
 
         if ( rightGoal ) {
           this.goal(player1);
@@ -91,5 +101,6 @@ export default class Ball {
           this.goal(player2);
           this.direction = -1;
         }
+
     }
 }

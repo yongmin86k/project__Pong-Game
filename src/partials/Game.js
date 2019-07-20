@@ -1,9 +1,10 @@
+import Init from "./Init";
 import Board from "./Board";
+import Net from "./Net";
 import Paddle from "./Paddle";
 import Ball from "./Ball";
 import Score from "./Score";
 import { SVG_NS, KEYS, PaddleOptions, BallOptions } from "../settings";
-import { clearScreenDown } from "readline";
 
 export default class Game {
   constructor(element, width, height) {
@@ -11,11 +12,36 @@ export default class Game {
     this.width = width;
     this.height = height;
 
-    // create SVG container
+    // SVG container
     this.gameElement = document.getElementById(this.element);
     
+    // initiate the first screen of game
+    this.initPlayer1 = new Init(
+        this.width, 
+        this.height, 
+        (this.width / 2)- 100, 
+        (this.height / 2) + 8, 
+        '> Single',
+      );
+    this.initPlayer2 = new Init(
+        this.width, 
+        this.height, 
+        (this.width / 2)+ 100, 
+        (this.height / 2) + 8, 
+        '> Multi',
+      );
+      this.caption = new Init(
+        this.width,
+        this.height,
+        this.width / 2,
+        this.height - 20,
+        'Press <- or -> to select the mode',
+        12
+      )
+
     // create a new object for the board and net with same size of the SVG container
     this.board = new Board(this.width, this.height);
+    this.net = new Net(this.width, this.height);
 
     // create new paddles for the each players
     this.player1 = new Paddle(
@@ -44,21 +70,36 @@ export default class Game {
     this.score2 = new Score(this.width / 2 + 40, 40, 32);
 
     // create a new ball for the game
-    this.ball = new Ball( BallOptions.ballSize, BallOptions.ballColor, this.width, this.height );
-    // this.ball2 = new Ball( 12, 'cyan', this.width, this.height );
+    this.ball = {};
+    for (let i = 0; i < BallOptions.number; i++){
+      this.ball[`new_${i}`] = new Ball(
+        [i], // nth of the  ball
+        this.width, // width of the Board
+        this.height, // width of the Board
+        BallOptions.ballSize[i], // size of each balls in settings.js (Default: 8)
+        BallOptions.ballColor[i] // color of each balls in settings.js (Default: white)
+        );
+    }
 
     document.addEventListener('keydown', event => {
       switch(event.key){
+        case KEYS.right:
+          this.selectPlayer = !this.selectPlayer;
+          break;
+        case KEYS.left:
+          this.selectPlayer = !this.selectPlayer;
+          break;
         case KEYS.spaceBar:
           this.pause = !this.pause;
           break;
       }
     });
 
-  } // end of constructor
+  } /* 
+    // end of constructor
+    */
 
   render() {
-
     if (this.pause) { // if pause === true, render stop
       return
     }
@@ -71,19 +112,28 @@ export default class Game {
     svg.setAttributeNS(null, "viewBox", [0, 0, this.width, this.height]);
     this.gameElement.appendChild(svg);
 
-    // Render the board and net
+    // Render the board
     this.board.render(svg);
 
+    // initialize the first screen of the game
+    this.initPlayer1.render(svg, !this.selectPlayer);
+    this.initPlayer2.render(svg, this.selectPlayer);
+    this.caption.render(svg)
+
+    // Render the net
+    // this.net.render(svg);
+
     // Render the paddles
-    this.player1.render(svg);
-    this.player2.render(svg);
+    // this.player1.render(svg);
+    // this.player2.render(svg);
 
     // Render the ball
-    this.ball.render(svg, this.player1, this.player2);
-    // this.ball2.render(svg, this.player1, this.player2);
+    // for (let i = 0; i < BallOptions.number; i++){
+    //   this.ball[`new_${i}`].render(svg, this.player1, this.player2);
+    // }
     
     // Update scores
-    this.score1.render(svg, this.player1.score);
-    this.score2.render(svg, this.player2.score);
+    // this.score1.render(svg, this.player1.score);
+    // this.score2.render(svg, this.player2.score);
   }
 }

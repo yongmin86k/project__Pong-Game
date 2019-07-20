@@ -2,6 +2,8 @@ export const SVG_NS  = 'http://www.w3.org/2000/svg';
 
 // key setting for the player 1 and player 2
 export const KEYS = {
+    right: 'ArrowRight',
+    left: 'ArrowLeft',
     a: 'a',        // player 1 up key
     z: 'z',        // player 1 down key
     up: 'ArrowUp',       // player 2 up key
@@ -13,7 +15,6 @@ export const KEYS = {
 export const PaddleOptions = {
     paddleWidth : 8,
     paddleHeight : 56,
-    // paddleHeight : 256,
     boardGap : 10,
     player1Color: '#FF0000',
     player2Color: '#00FFFF',
@@ -22,6 +23,9 @@ export const PaddleOptions = {
 
 // properties of Ball
 export const BallOptions = {
-    ballSize: 8,
-    ballColor: '#FFFFFF'
+    number: 1,
+    minSpeed: 3, // must be larger than 0
+    maxSpeed: 6,
+    ballSize: [8, 12, 16, 24],
+    ballColor: ['pink', 'cyan', 'yellow', 'yellowgreen']
 }

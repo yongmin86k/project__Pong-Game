@@ -7,7 +7,7 @@
   "main": "src/index.js",
   "scripts": {
     "start": "parcel index.html -p 3000",
-    "predeploy": "rm -rf dist && parcel build index.html --public-url /YOUR-REPO-NAME",
+    "predeploy": "rm -rf dist && parcel build index.html --public-url /Pong-Game-Project",
     "deploy": "gh-pages -d dist"
   },
   "devDependencies": {
