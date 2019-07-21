@@ -28,7 +28,7 @@ export default class Ball {
         this.vx = Math.max( Number((Math.random() * BallOptions.maxSpeed ).toFixed(2)), BallOptions.minSpeed ) * this.RandomDirection[Math.round(Math.random())];
         this.vy = Math.max( Number((Math.random() * BallOptions.maxSpeed ).toFixed(2)), BallOptions.minSpeed ) * this.RandomDirection[Math.round(Math.random())];
       }
-      console.log( `ball number: ${Number(this.index) + 1} | size: ${this.radius} | color: ${this.color} | speed: ${ Math.ceil( Math.abs(this.vx) + Math.abs(this.vy) ) / 2}`);
+      // console.log( `ball number: ${Number(this.index) + 1} | size: ${this.radius} | color: ${this.color} | speed: ${ Math.ceil( Math.abs(this.vx) + Math.abs(this.vy) ) / 2}`);
     }
 
     wallCollision(){

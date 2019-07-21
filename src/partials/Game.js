@@ -110,9 +110,8 @@ export default class Game {
   } /* 
     // end of constructor
     */
-
+  
   render() {
-
     // if pause === true, render stop
     if ( this.pause ) { return }
 
@@ -134,9 +133,13 @@ export default class Game {
 
     // Render first screen contents
     if (this.showFirstScreen === true){
+
       this.initPlayer1.render(svg, !this.isMulti);
       this.initPlayer2.render(svg, this.isMulti);
-      this.caption.render(svg);  
+      this.caption.render(svg);
+
+      document.addEventListener('keydown', this.selectMode, true);
+
     }
 
     // Render game contents
@@ -164,8 +167,32 @@ export default class Game {
         // Update scores
         this.score1.render(svg, this.player1.score);
         this.score2.render(svg, this.player2.score);
+
+        // return to the first page
+        document.addEventListener('keypress', event => {
+          switch(event.key){
+            case KEYS.enter:
+                // reset the paddle position
+                this.player1.x = PaddleOptions.boardGap;
+                this.player1.y = ((this.height - PaddleOptions.paddleHeight) / 2);
+                this.player2.x = this.width - (PaddleOptions.paddleWidth + PaddleOptions.boardGap);
+                this.player2.y = ((this.height - PaddleOptions.paddleHeight) / 2);
+                // reset the scores
+                this.player1.score = 0;
+                this.player2.score = -1; 
+                /* 
+                  I have no idea if I set player2's score with value 0, it returns with 1.
+                  So, I set -1 to make it 0
+                */
+                for (let i = 0; i < BallOptions.number; i++){
+                  this.ball[`new_${i}`].x = 0;
+                  this.ball[`new_${i}`].y = 0;
+                }    
+            break;
+          }
+        });
       }
 
     }
-  }
+  } // end of render function
 }
