@@ -17,27 +17,27 @@ export default class Game {
     
     // initiate the first screen of game
     this.initPlayer1 = new Init(
-        this.width, 
-        this.height, 
-        (this.width / 2)- 100, 
-        (this.height / 2) + 8, 
-        '> Single',
-      );
+      this.width, 
+      this.height, 
+      (this.width / 2)- 100, 
+      (this.height / 2) + 8, 
+      '> Single',
+    );
     this.initPlayer2 = new Init(
-        this.width, 
-        this.height, 
-        (this.width / 2)+ 100, 
-        (this.height / 2) + 8, 
-        '> Multi',
-      );
-      this.caption = new Init(
-        this.width,
-        this.height,
-        this.width / 2,
-        this.height - 20,
-        'Press <- or -> to select the mode',
-        12
-      )
+      this.width, 
+      this.height, 
+      (this.width / 2)+ 100, 
+      (this.height / 2) + 8, 
+      '> Multi',
+    );
+    this.caption = new Init(
+      this.width,
+      this.height,
+      this.width / 2,
+      this.height - 20,
+      'Press <- or -> to select the mode',
+      12
+    );
 
     // create a new object for the board and net with same size of the SVG container
     this.board = new Board(this.width, this.height);
@@ -81,6 +81,10 @@ export default class Game {
         );
     }
 
+    // switch between first screen and game screen
+    this.showFirstScreen = true;
+
+    // keys of switches which affect gameplay
     document.addEventListener('keydown', event => {
       switch(event.key){
         case KEYS.right:
@@ -92,6 +96,9 @@ export default class Game {
         case KEYS.spaceBar:
           this.pause = !this.pause;
           break;
+        case KEYS.enter:
+          this.startPlay =!this.startPlay;
+          break;
       }
     });
 
@@ -100,10 +107,14 @@ export default class Game {
     */
 
   render() {
-    if (this.pause) { // if pause === true, render stop
-      return
-    }
+    // if pause === true, render stop
+    if ( this.pause ) { return }
 
+    // hide the first screen when game begins
+    if ( this.startPlay === true ){ 
+      this.showFirstScreen = false;
+    }
+    
     // properties for SVG tag
     this.gameElement.innerHTML = ''; // Clear the html before appending to fix a render bug 👾
     let svg = document.createElementNS(SVG_NS, "svg");
@@ -115,25 +126,30 @@ export default class Game {
     // Render the board
     this.board.render(svg);
 
-    // initialize the first screen of the game
-    this.initPlayer1.render(svg, !this.selectPlayer);
-    this.initPlayer2.render(svg, this.selectPlayer);
-    this.caption.render(svg)
+    // Render first screen contents
+    if (this.showFirstScreen === true){
+      this.initPlayer1.render(svg, !this.selectPlayer);
+      this.initPlayer2.render(svg, this.selectPlayer);
+      this.caption.render(svg);  
+    }
 
-    // Render the net
-    // this.net.render(svg);
+    if ( this.startPlay === true ){
+      // Render the net
+      this.net.render(svg);
 
-    // Render the paddles
-    // this.player1.render(svg);
-    // this.player2.render(svg);
+      // Render the paddles
+      this.player1.render(svg);
+      this.player2.render(svg);
 
-    // Render the ball
-    // for (let i = 0; i < BallOptions.number; i++){
-    //   this.ball[`new_${i}`].render(svg, this.player1, this.player2);
-    // }
+      // Render the ball
+      for (let i = 0; i < BallOptions.number; i++){
+        this.ball[`new_${i}`].render(svg, this.player1, this.player2);
+      }
+      
+      // Update scores
+      this.score1.render(svg, this.player1.score);
+      this.score2.render(svg, this.player2.score);
+    }
     
-    // Update scores
-    // this.score1.render(svg, this.player1.score);
-    // this.score2.render(svg, this.player2.score);
   }
 }

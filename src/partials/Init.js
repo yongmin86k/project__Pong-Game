@@ -25,7 +25,8 @@ export default class Init {
             this.color = 'grey';
         };
         this.animate++;
-
+        
+        // renders svg texts
         let text = document.createElementNS(SVG_NS, 'text');
 
         text.setAttributeNS(null, 'x', this.x );
