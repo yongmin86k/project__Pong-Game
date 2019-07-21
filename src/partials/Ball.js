@@ -70,6 +70,9 @@ export default class Ball {
     }
 
     render(svg, player1, player2){
+      setTimeout(()=>{
+      
+      }, 500);
       // initiate the ball moving
       this.x += this.vx;
       // this.x += this.vx;

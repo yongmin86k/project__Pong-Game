@@ -92,10 +92,14 @@ export default class Game {
     document.addEventListener('keydown', event => {
       switch(event.key){
         case KEYS.right:
-          this.isMulti = !this.isMulti;
+          if ( this.showFirstScreen === true ){
+            this.isMulti = !this.isMulti;
+          }
           break;
         case KEYS.left:
-          this.isMulti = !this.isMulti;
+          if ( this.showFirstScreen === true ){
+            this.isMulti = !this.isMulti;
+          }
           break;
         case KEYS.spaceBar:
           this.pause = !this.pause;
@@ -145,54 +149,57 @@ export default class Game {
     // Render game contents
     if ( this.startPlay === true ){
 
-      // Play single-player mode
       if ( !this.isMulti ){
+        // Play single-player mode
         this.singlePlay.render(svg);
+      } else {
+        // Play muti-players mode
+        this.multiPlay(svg);
       }
       
-      // Play muti-players mode
-      if ( this.isMulti ){
-        // Render the net
-        this.net.render(svg);
-
-        // Render the paddles
-        this.player1.render(svg);
-        this.player2.render(svg);
-
-        // Render the ball
-        for (let i = 0; i < BallOptions.number; i++){
-          this.ball[`new_${i}`].render(svg, this.player1, this.player2);
-        }
-        
-        // Update scores
-        this.score1.render(svg, this.player1.score);
-        this.score2.render(svg, this.player2.score);
-
-        // return to the first page
-        document.addEventListener('keypress', event => {
-          switch(event.key){
-            case KEYS.enter:
-                // reset the paddle position
-                this.player1.x = PaddleOptions.boardGap;
-                this.player1.y = ((this.height - PaddleOptions.paddleHeight) / 2);
-                this.player2.x = this.width - (PaddleOptions.paddleWidth + PaddleOptions.boardGap);
-                this.player2.y = ((this.height - PaddleOptions.paddleHeight) / 2);
-                // reset the scores
-                this.player1.score = 0;
-                this.player2.score = -1; 
-                /* 
-                  I have no idea if I set player2's score with value 0, it returns with 1.
-                  So, I set -1 to make it 0
-                */
-                for (let i = 0; i < BallOptions.number; i++){
-                  this.ball[`new_${i}`].x = 0;
-                  this.ball[`new_${i}`].y = 0;
-                }    
-            break;
-          }
-        });
-      }
-
     }
   } // end of render function
+
+  multiPlay(svg){
+    // Render the net
+    this.net.render(svg);
+
+    // Render the paddles
+    this.player1.render(svg);
+    this.player2.render(svg);
+
+    // Render the ball
+    for (let i = 0; i < BallOptions.number; i++){
+      this.ball[`new_${i}`].render(svg, this.player1, this.player2);
+    }
+    
+    // Update scores
+    this.score1.render(svg, this.player1.score);
+    this.score2.render(svg, this.player2.score);
+
+    // return to the first page
+    document.addEventListener('keypress', event => {
+      switch(event.key){
+        case KEYS.enter:
+          // reset positions of balls
+          for (let i = 0; i < BallOptions.number; i++){
+            this.ball[`new_${i}`].x = 0;
+            this.ball[`new_${i}`].y = 0;
+          }    
+          // reset the paddle position
+          this.player1.x = PaddleOptions.boardGap;
+          this.player1.y = ((this.height - PaddleOptions.paddleHeight) / 2);
+          this.player2.x = this.width - (PaddleOptions.paddleWidth + PaddleOptions.boardGap);
+          this.player2.y = ((this.height - PaddleOptions.paddleHeight) / 2);
+          // reset the scores
+          this.player1.score = 0;
+          this.player2.score = -1; 
+          /* 
+            I have no idea if I set player2's score with value 0, it returns with 1.
+            So, I set -1 to make it 0
+          */
+        break;
+      }
+    });
+  }
 }
