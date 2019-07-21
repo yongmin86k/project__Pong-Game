@@ -4,6 +4,7 @@ import Net from "./Net";
 import Paddle from "./Paddle";
 import Ball from "./Ball";
 import Score from "./Score";
+import SingleMode from "./SingleMode";
 import { SVG_NS, KEYS, PaddleOptions, BallOptions } from "../settings";
 
 export default class Game {
@@ -39,9 +40,12 @@ export default class Game {
       12
     );
 
-    // create a new object for the board and net with same size of the SVG container
+    // create the board and net with same size of the SVG container
     this.board = new Board(this.width, this.height);
     this.net = new Net(this.width, this.height);
+
+    // create single-play mode notice
+    this.singlePlay = new SingleMode(this.width, this.height);
 
     // create new paddles for the each players
     this.player1 = new Paddle(
@@ -88,16 +92,17 @@ export default class Game {
     document.addEventListener('keydown', event => {
       switch(event.key){
         case KEYS.right:
-          this.selectPlayer = !this.selectPlayer;
+          this.isMulti = !this.isMulti;
           break;
         case KEYS.left:
-          this.selectPlayer = !this.selectPlayer;
+          this.isMulti = !this.isMulti;
           break;
         case KEYS.spaceBar:
           this.pause = !this.pause;
           break;
         case KEYS.enter:
           this.startPlay =!this.startPlay;
+          this.showFirstScreen = true; // return to the first screen
           break;
       }
     });
@@ -107,6 +112,7 @@ export default class Game {
     */
 
   render() {
+
     // if pause === true, render stop
     if ( this.pause ) { return }
 
@@ -128,28 +134,38 @@ export default class Game {
 
     // Render first screen contents
     if (this.showFirstScreen === true){
-      this.initPlayer1.render(svg, !this.selectPlayer);
-      this.initPlayer2.render(svg, this.selectPlayer);
+      this.initPlayer1.render(svg, !this.isMulti);
+      this.initPlayer2.render(svg, this.isMulti);
       this.caption.render(svg);  
     }
 
+    // Render game contents
     if ( this.startPlay === true ){
-      // Render the net
-      this.net.render(svg);
 
-      // Render the paddles
-      this.player1.render(svg);
-      this.player2.render(svg);
-
-      // Render the ball
-      for (let i = 0; i < BallOptions.number; i++){
-        this.ball[`new_${i}`].render(svg, this.player1, this.player2);
+      // Play single-player mode
+      if ( !this.isMulti ){
+        this.singlePlay.render(svg);
       }
       
-      // Update scores
-      this.score1.render(svg, this.player1.score);
-      this.score2.render(svg, this.player2.score);
+      // Play muti-players mode
+      if ( this.isMulti ){
+        // Render the net
+        this.net.render(svg);
+
+        // Render the paddles
+        this.player1.render(svg);
+        this.player2.render(svg);
+
+        // Render the ball
+        for (let i = 0; i < BallOptions.number; i++){
+          this.ball[`new_${i}`].render(svg, this.player1, this.player2);
+        }
+        
+        // Update scores
+        this.score1.render(svg, this.player1.score);
+        this.score2.render(svg, this.player2.score);
+      }
+
     }
-    
   }
 }
