@@ -21,14 +21,11 @@ export default class Ball {
       
       this.vx = 0;
       this.vy = 0;
-      
-      // start the game with random direction of the ball
-      this.RandomDirection = [-1, 1];
-      while( this.vy < Math.abs(BallOptions.minSpeed) && this.vx < Math.abs(BallOptions.minSpeed) ){ 
-        this.vx = Math.max( Number((Math.random() * BallOptions.maxSpeed ).toFixed(2)), BallOptions.minSpeed ) * this.RandomDirection[Math.round(Math.random())];
-        this.vy = Math.max( Number((Math.random() * BallOptions.maxSpeed ).toFixed(2)), BallOptions.minSpeed ) * this.RandomDirection[Math.round(Math.random())];
-      }
-      // console.log( `ball number: ${Number(this.index) + 1} | size: ${this.radius} | color: ${this.color} | speed: ${ Math.ceil( Math.abs(this.vx) + Math.abs(this.vy) ) / 2}`);
+
+      // start the game
+      this.vx = this.direction * BallOptions.speed;
+      this.vy = BallOptions.speed;
+      console.log( `ball number: ${Number(this.index) + 1} | size: ${this.radius} | color: ${this.color} | speed: ${ Math.ceil( Math.abs(this.vx) + Math.abs(this.vy) ) / 2}`);
     }
 
     wallCollision(){
@@ -70,9 +67,6 @@ export default class Ball {
     }
 
     render(svg, player1, player2){
-      setTimeout(()=>{
-      
-      }, 500);
       // initiate the ball moving
       this.x += this.vx;
       // this.x += this.vx;
@@ -98,12 +92,11 @@ export default class Ball {
       const leftGoal = this.x - this.radius <= 0;
 
         if ( rightGoal ) {
-          this.goal(player1);
           this.direction = 1;
+          this.goal(player1);
         } else if ( leftGoal ){
-          this.goal(player2);
           this.direction = -1;
+          this.goal(player2);
         }
-
     }
 }
