@@ -53,6 +53,9 @@ export default class Ball {
             // if true then there's a collision
             this.vx *= -1;
             this.ping.play(); // play the sound when paddle hits the ball          
+
+            // decrease size of the other player's paddle 
+            player1.height = Math.max(player1.height - 8, 8);
         }
 
       } else { // moving left
@@ -63,6 +66,9 @@ export default class Ball {
           ){
             this.vx *= -1;
             this.ping.play();
+
+            // decrease size of the other player's paddle 
+            player2.height = Math.max(player2.height - 8, 8);
           }
       }
     }

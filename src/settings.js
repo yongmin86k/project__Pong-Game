@@ -26,7 +26,7 @@ export const KEYS = {
 // properties of Paddle
 export const PaddleOptions = {
     paddleWidth : 8,
-    paddleHeight : 56,
+    paddleHeight : 88,
     boardGap : 10,
     player1Color: '#FF0000',
     player2Color: '#00FFFF',
@@ -46,5 +46,5 @@ export const BallOptions = {
     ballSize: [8, 10, 12, 14],
     maxBallsize: 56,
     minBallsize: 4, // must be larger than 0
-    ballColor: ['#FFFFFF', 'cyan', 'yellow', 'yellowgreen']
+    ballColor: ['rgba(240,240,240,0.8)', 'rgba(37,212,255,0.6)', 'rgba(255,252,37,0.6)', 'rgba(40,255,37,0.6)']
 }
