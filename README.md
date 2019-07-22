@@ -2,7 +2,7 @@
 
 A starter project for a basic pong game using SVGs.
 
-![Preview](dist/preview_game_0.png)
+![Preview](./dist/preview_game_0.png)
 &nbsp;
 
 &nbsp;
@@ -70,7 +70,7 @@ Read more about the [Parcel web application bundler here](https://parceljs.org/)
 ## Game instructions
 
 ### - Step 1 : Select number of players
-![Preview](dist/preview_game_1.png)
+![Preview](./dist/preview_game_1.png)
 - Single player 
 &nbsp;
 
@@ -85,7 +85,7 @@ Read more about the [Parcel web application bundler here](https://parceljs.org/)
 
 &nbsp;
 ### - Step 2 : Start playing with keyboard
-![Preview](dist/preview_game_2.png)
+![Preview](./dist/preview_game_2.png)
 - Player 1 is `Red` and plyaer 2 is `Cyan`.
 
 - The ball will move in 30fps after game begins.
@@ -96,7 +96,7 @@ Read more about the [Parcel web application bundler here](https://parceljs.org/)
 
 &nbsp;
 ### - Step 3 : Winning
-![Preview](dist/preview_game_3.png)
+![Preview](./dist/preview_game_3.png)
 - Either of players scores 10 wins the game.
 &nbsp;
 
@@ -121,7 +121,7 @@ https://github.com/bob/pong-project
 Update the `predeploy` script as follows:
 
 ```json
-"predeploy": "rm -rf dist && parcel build index.html --public-url /pong-project",
+"predeploy": "rm -rf ./dist && parcel build index.html --public-url /pong-project",
 ```
 
 Once you have done this, you can run:
