@@ -92,6 +92,11 @@ Read more about the [Parcel web application bundler here](https://parceljs.org/)
     &nbsp;
 
     This time can be modified in the file settings.js (`./src/images/setting.js`) and the property(`intervalGameTime: 30`).
+- The other player's paddle shrinks by `8` points if ball is hit.
+    &nbsp;
+
+    The paddle shrinks until the height is `16` point long.
+- Use special keys `f`, `v`, `g`, `b` for more dynamic play.
 &nbsp;
 
 &nbsp;
