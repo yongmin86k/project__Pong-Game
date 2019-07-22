@@ -1,4 +1,4 @@
-import { SVG_NS, BallOptions } from "../settings";
+import { SVG_NS, KEYS, BallOptions } from "../settings";
 import pingSound from "../../public/sounds/pong-01.wav";
 
 export default class Ball {
@@ -11,8 +11,11 @@ export default class Ball {
       this.direction = 1;
 
       this.ping = new Audio(pingSound);
-      
+
       this.reset();
+
+      this.changeSpeed();
+
     } // end of constructor
 
     reset(){
@@ -22,10 +25,12 @@ export default class Ball {
       this.vx = 0;
       this.vy = 0;
 
-      // start the game
+      // Randomize ball direction of going up or down
+      this.upOrDown = Math.round(Math.random() * 10) <= 5 ? 1 : -1;
       this.vx = this.direction * BallOptions.speed;
-      this.vy = BallOptions.speed;
-      console.log( `ball number: ${Number(this.index) + 1} | size: ${this.radius} | color: ${this.color} | speed: ${ Math.ceil( Math.abs(this.vx) + Math.abs(this.vy) ) / 2}`);
+      this.vy = this.upOrDown * BallOptions.speed;
+      
+      // console.log( `ball number: ${Number(this.index) + 1} | size: ${this.radius} | color: ${this.color} | speed: ${ Math.ceil( Math.abs(this.vx) + Math.abs(this.vy) ) / 2}`);
     }
 
     wallCollision(){
@@ -66,12 +71,45 @@ export default class Ball {
       this.reset();
     }
 
-    render(svg, player1, player2){
-      // initiate the ball moving
-      this.x += this.vx;
-      // this.x += this.vx;
-      this.y += this.vy;
+    // change the speed of balls
+    changeSpeed(){
+      document.addEventListener('keydown', event => {
+        switch(event.key){
+          case KEYS.ballFast:
+              BallOptions.speed = Math.min(BallOptions.speed + 1, BallOptions.maxSpeed);
+              if ( this.vx > 0){ 
+                this.vx = Math.min(this.vx + 1, BallOptions.maxSpeed);
+              } else { 
+                this.vx = Math.max((Math.abs(this.vx) + 1) * -1, -BallOptions.maxSpeed);
+              }
+              if ( this.vy > 0){ 
+                this.vy = Math.min(this.vy + 1, BallOptions.maxSpeed);
+              } else { 
+                this.vy = Math.max((Math.abs(this.vy) + 1) * -1, -BallOptions.maxSpeed);
+              }
+            break;
+          case KEYS.ballSlow:
+              BallOptions.speed = Math.max(BallOptions.speed - 1, BallOptions.minSpeed);
+              if ( this.vx > 0){ 
+                this.vx = Math.max(this.vx - 1, BallOptions.minSpeed);
+              } else { 
+                this.vx = Math.min((Math.abs(this.vx) - 1) * -1, -BallOptions.minSpeed);
+              }
+              if ( this.vy > 0){ 
+                this.vy = Math.max(this.vy - 1, BallOptions.minSpeed);
+              } else { 
+                this.vy = Math.min((Math.abs(this.vy) - 1) * -1, -BallOptions.minSpeed);
+              }
+            break;
+        }
+      });
+    }
 
+    render(svg, player1, player2){
+
+      // initiate the ball moving
+      this.x += this.vx; 
+      this.y += this.vy;
       // bounce when the ball hits the walls
       this.wallCollision();
 
@@ -98,5 +136,5 @@ export default class Ball {
           this.direction = -1;
           this.goal(player2);
         }
-    }
+    } // end of render()
 }

@@ -82,9 +82,9 @@ export default class Game {
 
     // switch between first screen and game screen
     this.showFirstScreen = true;
-
+    
     // keys of switches which affect gameplay
-    document.addEventListener('keydown', event => {
+    document.addEventListener('keydown', event => { 
       switch(event.key){
         case KEYS.right:
           if ( this.showFirstScreen === true ){
@@ -152,15 +152,10 @@ export default class Game {
 
     // Render game contents
     if ( this.startPlay === true ){
-
-      if ( !this.isMulti ){
-        // Play single-player mode
-        this.singlePlay.render(svg);
-      } else {
-        // Play muti-players mode
-        this.multiPlay(svg);
-      }
-      
+      // Play single-player mode
+      if ( !this.isMulti ){ this.singlePlay.render(svg); }
+      // Play muti-players mode
+      else { this.multiPlay(svg); }
     }
 
   } // end of render()
