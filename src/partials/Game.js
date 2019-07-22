@@ -13,7 +13,7 @@ export default class Game {
     this.element = element;
     this.width = width;
     this.height = height;
-
+    
     // SVG container
     this.gameElement = document.getElementById(this.element);
     
@@ -113,13 +113,22 @@ export default class Game {
     this.player2.render(svg);
     
     // Render the ball
-    for (let i = 0; i < BallOptions.number; i++){
+    let i = 0;
+    for (i; i < BallOptions.number; i++){
       this.ball[`new_${i}`].render(svg, this.player1, this.player2);
     }
 
     // Update scores
     this.score1.render(svg, this.player1.score);
     this.score2.render(svg, this.player2.score);
+
+    let lastBall = `new_${i - 1}`;
+    if (this.ballSize[KEYS.ballBig]) {
+      this.ballBig(this.ball[lastBall]);
+    }
+    if (this.ballSize[KEYS.ballSmall]){
+      this.ballSmall(this.ball[lastBall]);
+    }
   } // end of multiPlay()
 
   resetGame(){
@@ -147,6 +156,25 @@ export default class Game {
     // the scores
     this.player1.score = 0;
     this.player2.score = 0; 
+    
+    this.ballSize = {};
+    this.changeSize();
+  }
+
+  // change the size of balls
+  changeSize(){
+    document.addEventListener('keydown', event => {
+      this.ballSize[event.key] = true;
+    });
+    document.addEventListener('keyup', event => {
+      this.ballSize[event.key] = false;
+    })
+  }
+  ballBig(ball){
+    ball.radius = Math.min( ball.radius + 2, BallOptions.maxBall );
+  }
+  ballSmall(ball){
+    ball.radius = Math.max( ball.radius - 2, BallOptions.minBall );
   }
 
   render() {

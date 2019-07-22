@@ -16,8 +16,6 @@ export default class Ball {
 
       this.reset();
       this.changeSpeed();
-      this.ballSize = {};
-      this.changeSize();
 
     } // end of constructor
 
@@ -34,8 +32,6 @@ export default class Ball {
       while ( this.vy === 0 ){
         this.vy = this.upOrDown * this.vx;
       }
-      
-      // console.log( `ball number: ${Number(this.index) + 1} | size: ${this.radius} | color: ${this.color} | speed: ${ Math.ceil( Math.abs(this.vx) + Math.abs(this.vy) ) / 2}`);
       
       // Reset the time when either player scores
       if (this.gameTime >= GameOptions.intervalGameTime ){ this.gameTime = 0; }
@@ -79,6 +75,7 @@ export default class Ball {
     // change the speed of balls
     changeSpeed(){
       document.addEventListener('keydown', event => {
+        console.log( `ball number: ${Number(this.index) + 1} | size: ${this.radius} | color: ${this.color} | speed: ${ Math.ceil( Math.abs(this.vx) + Math.abs(this.vy) ) / 2}`);
         switch(event.key){
           case KEYS.ballFast:
               BallOptions.speed = Math.min(BallOptions.speed + 1, BallOptions.maxSpeed);
@@ -109,20 +106,6 @@ export default class Ball {
         }
       });
     }
-    changeSize(){
-      document.addEventListener('keydown', event => {
-        this.ballSize[event.key] = true;
-      });
-      document.addEventListener('keyup', event => {
-        this.ballSize[event.key] = false;
-      })
-    }
-    ballBig(){
-      this.radius = Math.min( this.radius + 2, BallOptions.maxBall );
-    }
-    ballSmall(){
-      this.radius = Math.max( this.radius - 2, BallOptions.minBall );
-    }
 
     render(svg, player1, player2){
       this.gameTime++;
@@ -133,14 +116,7 @@ export default class Ball {
       } else {
         this.x += this.vx; 
         this.y += this.vy;  
-      }
-      
-      if (this.ballSize[KEYS.ballBig]) {
-        this.ballBig();
-      }
-      if (this.ballSize[KEYS.ballSmall]){
-        this.ballSmall();
-      }
+      } 
 
       // create a ball
       let circle = document.createElementNS(SVG_NS, 'circle');

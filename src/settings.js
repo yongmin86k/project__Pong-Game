@@ -33,7 +33,7 @@ export const PaddleOptions = {
 
 // properties of Ball
 export const BallOptions = {
-    number: 3,
+    number: 1,
     speed: 3.5, // must be larger than 0 
               // must be same in Game.js reset section => BallOptions.speed
     minSpeed: 1,
