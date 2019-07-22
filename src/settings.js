@@ -1,5 +1,9 @@
 export const SVG_NS  = 'http://www.w3.org/2000/svg';
 
+export const GameOptions = {
+    winningScore: 1,
+}
+
 // key setting for the player 1 and player 2
 export const KEYS = {
     right: 'ArrowRight',

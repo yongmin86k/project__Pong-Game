@@ -5,6 +5,7 @@ import Paddle from "./Paddle";
 import Ball from "./Ball";
 import Score from "./Score";
 import SingleMode from "./SingleMode";
+import Winner from "./Winner";
 import { SVG_NS, KEYS, PaddleOptions, BallOptions } from "../settings";
 
 export default class Game {
@@ -36,7 +37,7 @@ export default class Game {
       this.height,
       this.width / 2,
       this.height - 20,
-      'Press <- or -> to select the mode',
+      'Press <- or -> to select the mode and hit <Enter>',
       12
     );
 
@@ -111,6 +112,10 @@ export default class Game {
       }
     });
 
+    // new Object and instance for the winner
+    this.winner;
+    this.isWinner = new Winner();
+
   } /* 
     // end of constructor
     */
@@ -118,7 +123,7 @@ export default class Game {
   render() {
     // if pause === true, render stop
     if ( this.pause ) { return }
-
+    
     // hide the first screen when game begins
     if ( this.startPlay === true ){ 
       this.showFirstScreen = false;
@@ -146,6 +151,13 @@ export default class Game {
 
     }
 
+    // Display the winner of the game
+    if ( this.winner ) {
+
+      // console.log(`The winner is ${this.winner}`);
+      return
+    }
+
     // Render game contents
     if ( this.startPlay === true ){
 
@@ -158,7 +170,10 @@ export default class Game {
       }
       
     }
-  } // end of render function
+
+    // Assign who is the winner
+    this.winner = this.isWinner.winnerIs(this.player1.score, this.player2.score);
+  } // end of render()
 
   multiPlay(svg){
     // Render the net
@@ -181,6 +196,8 @@ export default class Game {
     document.addEventListener('keypress', event => {
       switch(event.key){
         case KEYS.enter:
+          // reset the winner
+            this.winner = undefined;
           // reset positions of balls
           for (let i = 0; i < BallOptions.number; i++){
             this.ball[`new_${i}`].x = 0;
@@ -195,11 +212,12 @@ export default class Game {
           this.player1.score = 0;
           this.player2.score = -1; 
           /* 
-            I have no idea if I set player2's score with value 0, it returns with 1.
+            I absolutely have no idea when I set player2's score with value 0, it returns with 1.
             So, I set -1 to make it 0
           */
         break;
       }
     });
-  }
+
+  } // end of multiPlay()
 }
