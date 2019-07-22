@@ -1,4 +1,4 @@
-import { SVG_NS, KEYS, BallOptions } from "../settings";
+import { SVG_NS, KEYS, BallOptions, GameOptions } from "../settings";
 import pingSound from "../../public/sounds/pong-01.wav";
 
 export default class Ball {
@@ -12,8 +12,9 @@ export default class Ball {
 
       this.ping = new Audio(pingSound);
 
-      this.reset();
+      this.gameTime = 0; // Time for game play in FPS
 
+      this.reset();
       this.changeSpeed();
 
     } // end of constructor
@@ -21,7 +22,6 @@ export default class Ball {
     reset(){
       this.x = this.boardWidth / 2;
       this.y = this.boardHeight / 2;
-      
       this.vx = 0;
       this.vy = 0;
 
@@ -29,16 +29,15 @@ export default class Ball {
       this.upOrDown = Math.round(Math.random() * 10) <= 5 ? 1 : -1;
       this.vx = this.direction * BallOptions.speed;
       this.vy = this.upOrDown * BallOptions.speed;
+        // console.log( `ball number: ${Number(this.index) + 1} | size: ${this.radius} | color: ${this.color} | speed: ${ Math.ceil( Math.abs(this.vx) + Math.abs(this.vy) ) / 2}`);
       
-      // console.log( `ball number: ${Number(this.index) + 1} | size: ${this.radius} | color: ${this.color} | speed: ${ Math.ceil( Math.abs(this.vx) + Math.abs(this.vy) ) / 2}`);
+      // Reset the time when either player scores
+      if (this.gameTime >= GameOptions.intervalGameTime ){ this.gameTime = 0; }
     }
 
     wallCollision(){
-      const hitLeft = this.x - this.radius <= 0;
-      const hitRight = this.x + this.radius >= this.boardWidth;
       const hitTop = this.y - this.radius <= 0;
       const hitBottom = this.y + this.radius >= this.boardHeight;
-      if (hitLeft || hitRight ){ this.vx *= -1; } // this.vx = -this.vx;
       if (hitTop || hitBottom ){ this.vy *= -1; }
     }
 
@@ -106,16 +105,12 @@ export default class Ball {
     }
 
     render(svg, player1, player2){
-
-      // initiate the ball moving
-      this.x += this.vx; 
-      this.y += this.vy;
-      // bounce when the ball hits the walls
-      this.wallCollision();
-
-      // reflect when the ball hits the paddle
-      this.paddleCollision(player1, player2);
-
+      this.gameTime++;
+      
+      if (this.gameTime < GameOptions.intervalGameTime){
+        this.reset();
+      }
+      
       // create a ball
       let circle = document.createElementNS(SVG_NS, 'circle');
         circle.setAttributeNS(null, 'r', this.radius);
@@ -124,17 +119,29 @@ export default class Ball {
         circle.setAttributeNS(null, 'cy', this.y);
 
         svg.appendChild(circle);
+        
+      // initiate the ball moving after intervalGameTime(settings.js)
+      if (this.gameTime >= GameOptions.intervalGameTime) {
+        this.x += this.vx; 
+        this.y += this.vy;  
+      }
 
-        // change ball direction when a player scores
+      // change ball direction when a player scores
       const rightGoal = this.x + this.radius >= this.boardWidth;
       const leftGoal = this.x - this.radius <= 0;
-
-        if ( rightGoal ) {
-          this.direction = 1;
-          this.goal(player1);
-        } else if ( leftGoal ){
-          this.direction = -1;
-          this.goal(player2);
-        }
+      
+      if ( rightGoal ) {
+        this.direction = 1;
+        this.goal(player1);
+      } else if ( leftGoal ){
+        this.direction = -1;
+        this.goal(player2);
+      }
+    
+      // bounce when the ball hits the walls
+      this.wallCollision(this.gameTime);
+      
+      // reflect when the ball hits the paddle
+      this.paddleCollision(player1, player2);
     } // end of render()
 }

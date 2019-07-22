@@ -114,14 +114,53 @@ export default class Game {
     // end of constructor
     */
   
+  multiPlay(svg){
+    
+    // Render the net
+    this.net.render(svg);
+    
+    // Render the paddles
+    this.player1.render(svg);
+    this.player2.render(svg);
+    
+    // Render the ball
+    for (let i = 0; i < BallOptions.number; i++){
+      this.ball[`new_${i}`].render(svg, this.player1, this.player2);
+    }
+
+    // Update scores
+    this.score1.render(svg, this.player1.score);
+    this.score2.render(svg, this.player2.score);
+  } // end of multiPlay()
+
+  resetGame(){
+    // reset 
+
+      // speed of balls
+      BallOptions.speed = 3;
+      // the winner
+        this.winner = undefined;
+      // positions of balls
+      for (let i = 0; i < BallOptions.number; i++){
+        this.ball[`new_${i}`].x = 0;
+        this.ball[`new_${i}`].y = 0;
+      }    
+      // the paddle position
+      this.player1.x = PaddleOptions.boardGap;
+      this.player1.y = ((this.height - PaddleOptions.paddleHeight) / 2);
+      this.player2.x = this.width - (PaddleOptions.paddleWidth + PaddleOptions.boardGap);
+      this.player2.y = ((this.height - PaddleOptions.paddleHeight) / 2);
+      // the scores
+      this.player1.score = 0;
+      this.player2.score = 0; 
+  }
+
   render() {
     // if pause === true, render stop
     if ( this.pause ) { return }
     
     // hide the first screen when game begins
-    if ( this.startPlay === true ){ 
-      this.showFirstScreen = false;
-    }
+    if ( this.startPlay === true ){ this.showFirstScreen = false; }
     
     // properties for SVG tag
     this.gameElement.innerHTML = ''; // Clear the html before appending to fix a render bug 👾
@@ -133,76 +172,34 @@ export default class Game {
 
     // Render the board
     this.board.render(svg);
-
+    
     // Render first screen contents
     if (this.showFirstScreen === true){
       this.initPlayer1.render(svg, !this.isMulti);
       this.initPlayer2.render(svg, this.isMulti);
       this.caption.render(svg);
+      
+      // reset the game properties
+      this.resetGame();
     }
-
+    
     // Assign who is the winner
     this.winner = this.displayWinner.winnerIs(this.player1.score, this.player2.score);
-
+    
     // Display the winner of the game
     if ( this.winner ) {
       this.displayWinner.render(svg, this.winner);
       return
     }
-
+    
     // Render game contents
     if ( this.startPlay === true ){
       // Play single-player mode
       if ( !this.isMulti ){ this.singlePlay.render(svg); }
       // Play muti-players mode
-      else { this.multiPlay(svg); }
+      else { 
+        this.multiPlay(svg);
+       }
     }
-
   } // end of render()
-
-  multiPlay(svg){
-    // Render the net
-    this.net.render(svg);
-
-    // Render the paddles
-    this.player1.render(svg);
-    this.player2.render(svg);
-
-    // Render the ball
-    for (let i = 0; i < BallOptions.number; i++){
-      this.ball[`new_${i}`].render(svg, this.player1, this.player2);
-    }
-    
-    // Update scores
-    this.score1.render(svg, this.player1.score);
-    this.score2.render(svg, this.player2.score);
-
-    // return to the first page
-    document.addEventListener('keypress', event => {
-      switch(event.key){
-        case KEYS.enter:
-          // reset the winner
-            this.winner = undefined;
-          // reset positions of balls
-          for (let i = 0; i < BallOptions.number; i++){
-            this.ball[`new_${i}`].x = 0;
-            this.ball[`new_${i}`].y = 0;
-          }    
-          // reset the paddle position
-          this.player1.x = PaddleOptions.boardGap;
-          this.player1.y = ((this.height - PaddleOptions.paddleHeight) / 2);
-          this.player2.x = this.width - (PaddleOptions.paddleWidth + PaddleOptions.boardGap);
-          this.player2.y = ((this.height - PaddleOptions.paddleHeight) / 2);
-          // reset the scores
-          this.player1.score = 0;
-          this.player2.score = -1; 
-          /* 
-            I absolutely have no idea when I set player2's score with value 0, it returns with 1.
-            So, I set -1 to make it 0
-          */
-        break;
-      }
-    });
-
-  } // end of multiPlay()
 }
