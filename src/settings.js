@@ -1,8 +1,8 @@
 export const SVG_NS  = 'http://www.w3.org/2000/svg';
 
 export const GameOptions = {
-    winningScore: 5,
-    intervalGameTime: 30,
+    winningScore: 10,
+    intervalGameTime: 30, // unit is FPS
 }
 
 // key setting for the player 1 and player 2
