@@ -5,7 +5,7 @@ export default class SingleMode {
         this.x = boardWidth / 2;
         this.y = (boardHeight / 2) - 40;
         this.animate = 0;
-        this.limit = 56;
+        this.limit = 16;
     }
 
     render(svg){
@@ -29,15 +29,15 @@ export default class SingleMode {
         tspan2.setAttributeNS(null, 'font-size', 16 );
         tspan2.setAttributeNS(null, 'fill', 'transparent');
         // flash the return text 
-        if ( this.animate < this.limit / 4 ){
+        if ( this.animate < this.limit ){
             tspan2.setAttributeNS(null, 'fill', 'transparent');
-        } else if ( this.animate >= this.limit / 4 && this.animate < this.limit / 2 ){
+        } else if ( this.animate >= this.limit && this.animate < this.limit * 2 ){
             tspan2.setAttributeNS(null, 'fill', '#70B2B1');
-        } else if ( this.animate >= this.limit / 2 && this.animate < this.limit / 4 * 3 ){
+        } else if ( this.animate >= this.limit * 2 && this.animate < this.limit * 3 ){
             tspan2.setAttributeNS(null, 'fill', '#26601F');
-        } else if ( this.animate >= this.limit / 4 * 3 && this.animate < this.limit ){
+        } else if ( this.animate >= this.limit * 3 && this.animate < this.limit * 4 ){
             tspan2.setAttributeNS(null, 'fill', '#70B2B1');
-        } else if (this.animate >= this.limit ) {
+        } else if (this.animate >= this.limit * 4 ) {
             this.animate = 0;
         }
         this.animate++;

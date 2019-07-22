@@ -19,22 +19,16 @@ export default class Game {
     
     // initiate the first screen of game
     this.initPlayer1 = new Init(
-      this.width, 
-      this.height, 
-      (this.width / 2)- 100, 
+      (this.width / 2) - 100, 
       (this.height / 2) + 8, 
       '> Single',
     );
     this.initPlayer2 = new Init(
-      this.width, 
-      this.height, 
-      (this.width / 2)+ 100, 
+      (this.width / 2) + 100, 
       (this.height / 2) + 8, 
       '> Multi',
     );
     this.caption = new Init(
-      this.width,
-      this.height,
       this.width / 2,
       this.height - 20,
       'Press <- or -> to select the mode and hit <Enter>',
@@ -114,7 +108,7 @@ export default class Game {
 
     // new Object and instance for the winner
     this.winner;
-    this.isWinner = new Winner();
+    this.displayWinner = new Winner(this.width);
 
   } /* 
     // end of constructor
@@ -142,19 +136,17 @@ export default class Game {
 
     // Render first screen contents
     if (this.showFirstScreen === true){
-
       this.initPlayer1.render(svg, !this.isMulti);
       this.initPlayer2.render(svg, this.isMulti);
       this.caption.render(svg);
-
-      document.addEventListener('keydown', this.selectMode, true);
-
     }
+
+    // Assign who is the winner
+    this.winner = this.displayWinner.winnerIs(this.player1.score, this.player2.score);
 
     // Display the winner of the game
     if ( this.winner ) {
-
-      // console.log(`The winner is ${this.winner}`);
+      this.displayWinner.render(svg, this.winner);
       return
     }
 
@@ -171,8 +163,6 @@ export default class Game {
       
     }
 
-    // Assign who is the winner
-    this.winner = this.isWinner.winnerIs(this.player1.score, this.player2.score);
   } // end of render()
 
   multiPlay(svg){

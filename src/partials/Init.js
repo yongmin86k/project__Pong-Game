@@ -1,9 +1,7 @@
 import { SVG_NS } from "../settings";
 
 export default class Init {
-    constructor(width, height, x, y, text, textSize = 20){
-        this.width = width;
-        this.height = height;
+    constructor(x, y, text, textSize = 20){
         this.x = x;
         this.y = y;
         this.text = text;
