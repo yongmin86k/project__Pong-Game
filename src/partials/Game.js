@@ -194,11 +194,13 @@ export default class Game {
     
     // reset the winner
       this.winner = undefined;   
-    // the paddle position
+    // the paddle properties
     this.player1.x = PaddleOptions.boardGap;
     this.player1.y = ((this.height - PaddleOptions.paddleHeight) / 2);
+    this.player1.height = PaddleOptions.paddleHeight;
     this.player2.x = this.width - (PaddleOptions.paddleWidth + PaddleOptions.boardGap);
     this.player2.y = ((this.height - PaddleOptions.paddleHeight) / 2);
+    this.player2.height = PaddleOptions.paddleHeight;
     // the scores
     this.player1.score = 0;
     this.player2.score = 0; 

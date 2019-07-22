@@ -1,4 +1,4 @@
-import { SVG_NS, KEYS, BallOptions, GameOptions } from "../settings";
+import { SVG_NS, KEYS, PaddleOptions, BallOptions, GameOptions } from "../settings";
 import pingSound from "../../public/sounds/pong-01.wav";
 
 export default class Ball {
@@ -13,6 +13,8 @@ export default class Ball {
       this.ping = new Audio(pingSound);
 
       this.gameTime = 0; // Time for game play in FPS
+      this.collisionTime1 = 0;
+      this.collisionTime2 = 0;
 
       this.reset();
       this.changeSpeed();
@@ -34,7 +36,11 @@ export default class Ball {
       }
       
       // Reset the time when either player scores
-      if (this.gameTime >= GameOptions.intervalGameTime ){ this.gameTime = 0; }
+      if (this.gameTime >= GameOptions.intervalGameTime ){ 
+        this.gameTime = 0;
+        this.collisionTime1 = 0;
+        this.collisionTime2 = 0;
+       }
     }
 
     wallCollision(){
@@ -56,8 +62,11 @@ export default class Ball {
 
             // decrease size of the other player's paddle 
             player1.height = Math.max(player1.height - 8, 8);
-        }
 
+            // assign collisionTime for player 2
+            this.collisionTime2 = this.gameTime + 10;
+
+        }
       } else { // moving left
         // collision detection for left paddle
         if ( this.x - this.radius >= player1.x && // left edge of the ball is
@@ -69,10 +78,27 @@ export default class Ball {
 
             // decrease size of the other player's paddle 
             player2.height = Math.max(player2.height - 8, 8);
+
+            // assign collisionTime for player 1
+            this.collisionTime1 = this.gameTime + 10;
           }
       }
-    }
+      
+      // // changes paddle color
+      if (this.gameTime < this.collisionTime1){
+        player1.color = 'white';
+      } else {
+        player1.color = PaddleOptions.player1Color;
+      }
 
+      if (this.gameTime < this.collisionTime2){
+        player2.color = 'white';
+      } else {
+        player2.color = PaddleOptions.player2Color;
+      }
+      
+    } // end of paddleCollision()
+    
     goal(player) {
       player.score++;
       this.reset();

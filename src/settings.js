@@ -1,7 +1,7 @@
 export const SVG_NS  = 'http://www.w3.org/2000/svg';
 
 export const GameOptions = {
-    winningScore: 10,
+    winningScore: 5,
     intervalGameTime: 30,
 }
 
