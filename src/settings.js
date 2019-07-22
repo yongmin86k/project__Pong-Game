@@ -2,7 +2,7 @@ export const SVG_NS  = 'http://www.w3.org/2000/svg';
 
 export const GameOptions = {
     winningScore: 10,
-    intervalGameTime: 50,
+    intervalGameTime: 30,
 }
 
 // key setting for the player 1 and player 2
@@ -16,7 +16,9 @@ export const KEYS = {
     spaceBar: ' ', // we'll use this later...
     enter: 'Enter',
     ballFast: 'f',
-    ballSlow: 'v'
+    ballSlow: 'v',
+    ballBig: 'g',
+    ballSmall: 'b',
   }
 
 // properties of Paddle
@@ -31,10 +33,13 @@ export const PaddleOptions = {
 
 // properties of Ball
 export const BallOptions = {
-    number: 1,
-    speed: 3, // must be larger than 0
+    number: 3,
+    speed: 3.5, // must be larger than 0 
+              // must be same in Game.js reset section => BallOptions.speed
     minSpeed: 1,
     maxSpeed: 10,
-    ballSize: [8, 12, 16, 24],
-    ballColor: ['pink', 'cyan', 'yellow', 'yellowgreen']
+    ballSize: [8],
+    maxBall: 56,
+    minBall: 4, // must be larger than 0
+    ballColor: ['#FFFFFF', 'cyan', 'yellow', 'yellowgreen']
 }

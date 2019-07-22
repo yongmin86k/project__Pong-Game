@@ -68,18 +68,6 @@ export default class Game {
     this.score1 = new Score(this.width / 2 - 40, 40, 32);
     this.score2 = new Score(this.width / 2 + 40, 40, 32);
 
-    // create a new ball for the game
-    this.ball = {};
-    for (let i = 0; i < BallOptions.number; i++){
-      this.ball[`new_${i}`] = new Ball(
-        [i], // nth of the  ball
-        this.width, // width of the Board
-        this.height, // width of the Board
-        BallOptions.ballSize[i], // size of each balls in settings.js (Default: 8)
-        BallOptions.ballColor[i] // color of each balls in settings.js (Default: white)
-        );
-    }
-
     // switch between first screen and game screen
     this.showFirstScreen = true;
     
@@ -102,6 +90,8 @@ export default class Game {
         case KEYS.enter:
           this.startPlay =!this.startPlay;
           this.showFirstScreen = true; // return to the first screen
+          // reset the game properties
+          this.resetGame();
           break;
       }
     });
@@ -115,7 +105,6 @@ export default class Game {
     */
   
   multiPlay(svg){
-    
     // Render the net
     this.net.render(svg);
     
@@ -134,25 +123,30 @@ export default class Game {
   } // end of multiPlay()
 
   resetGame(){
-    // reset 
-
-      // speed of balls
-      BallOptions.speed = 3;
-      // the winner
-        this.winner = undefined;
-      // positions of balls
-      for (let i = 0; i < BallOptions.number; i++){
-        this.ball[`new_${i}`].x = 0;
-        this.ball[`new_${i}`].y = 0;
-      }    
-      // the paddle position
-      this.player1.x = PaddleOptions.boardGap;
-      this.player1.y = ((this.height - PaddleOptions.paddleHeight) / 2);
-      this.player2.x = this.width - (PaddleOptions.paddleWidth + PaddleOptions.boardGap);
-      this.player2.y = ((this.height - PaddleOptions.paddleHeight) / 2);
-      // the scores
-      this.player1.score = 0;
-      this.player2.score = 0; 
+    // create a new ball for the game
+    this.ball = {};
+    for (let i = 0; i < BallOptions.number; i++){
+      this.ball[`new_${i}`] = new Ball(
+        [i], // nth of the  ball
+        this.width, // width of the Board
+        this.height, // width of the Board
+        BallOptions.ballSize[i], // size of each balls in settings.js (Default: 8)
+        BallOptions.ballColor[i] // color of each balls in settings.js (Default: white)
+        );
+    }   
+    // reset speed of balls
+    BallOptions.speed = 3.5;
+    
+    // reset the winner
+      this.winner = undefined;   
+    // the paddle position
+    this.player1.x = PaddleOptions.boardGap;
+    this.player1.y = ((this.height - PaddleOptions.paddleHeight) / 2);
+    this.player2.x = this.width - (PaddleOptions.paddleWidth + PaddleOptions.boardGap);
+    this.player2.y = ((this.height - PaddleOptions.paddleHeight) / 2);
+    // the scores
+    this.player1.score = 0;
+    this.player2.score = 0; 
   }
 
   render() {
@@ -178,9 +172,6 @@ export default class Game {
       this.initPlayer1.render(svg, !this.isMulti);
       this.initPlayer2.render(svg, this.isMulti);
       this.caption.render(svg);
-      
-      // reset the game properties
-      this.resetGame();
     }
     
     // Assign who is the winner

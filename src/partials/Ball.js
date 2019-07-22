@@ -16,6 +16,8 @@ export default class Ball {
 
       this.reset();
       this.changeSpeed();
+      this.ballSize = {};
+      this.changeSize();
 
     } // end of constructor
 
@@ -27,9 +29,13 @@ export default class Ball {
 
       // Randomize ball direction of going up or down
       this.upOrDown = Math.round(Math.random() * 10) <= 5 ? 1 : -1;
-      this.vx = this.direction * BallOptions.speed;
-      this.vy = this.upOrDown * BallOptions.speed;
-        // console.log( `ball number: ${Number(this.index) + 1} | size: ${this.radius} | color: ${this.color} | speed: ${ Math.ceil( Math.abs(this.vx) + Math.abs(this.vy) ) / 2}`);
+      this.vx = this.direction * Math.random() * BallOptions.speed;
+      this.vy = 0;
+      while ( this.vy === 0 ){
+        this.vy = this.upOrDown * this.vx;
+      }
+      
+      // console.log( `ball number: ${Number(this.index) + 1} | size: ${this.radius} | color: ${this.color} | speed: ${ Math.ceil( Math.abs(this.vx) + Math.abs(this.vy) ) / 2}`);
       
       // Reset the time when either player scores
       if (this.gameTime >= GameOptions.intervalGameTime ){ this.gameTime = 0; }
@@ -103,14 +109,39 @@ export default class Ball {
         }
       });
     }
+    changeSize(){
+      document.addEventListener('keydown', event => {
+        this.ballSize[event.key] = true;
+      });
+      document.addEventListener('keyup', event => {
+        this.ballSize[event.key] = false;
+      })
+    }
+    ballBig(){
+      this.radius = Math.min( this.radius + 2, BallOptions.maxBall );
+    }
+    ballSmall(){
+      this.radius = Math.max( this.radius - 2, BallOptions.minBall );
+    }
 
     render(svg, player1, player2){
       this.gameTime++;
       
+      // initiate the ball moving after intervalGameTime(settings.js)
       if (this.gameTime < GameOptions.intervalGameTime){
         this.reset();
+      } else {
+        this.x += this.vx; 
+        this.y += this.vy;  
       }
       
+      if (this.ballSize[KEYS.ballBig]) {
+        this.ballBig();
+      }
+      if (this.ballSize[KEYS.ballSmall]){
+        this.ballSmall();
+      }
+
       // create a ball
       let circle = document.createElementNS(SVG_NS, 'circle');
         circle.setAttributeNS(null, 'r', this.radius);
@@ -119,13 +150,7 @@ export default class Ball {
         circle.setAttributeNS(null, 'cy', this.y);
 
         svg.appendChild(circle);
-        
-      // initiate the ball moving after intervalGameTime(settings.js)
-      if (this.gameTime >= GameOptions.intervalGameTime) {
-        this.x += this.vx; 
-        this.y += this.vy;  
-      }
-
+      
       // change ball direction when a player scores
       const rightGoal = this.x + this.radius >= this.boardWidth;
       const leftGoal = this.x - this.radius <= 0;
