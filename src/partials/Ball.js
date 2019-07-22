@@ -16,7 +16,7 @@ export default class Ball {
 
       this.reset();
       this.changeSpeed();
-
+      
     } // end of constructor
 
     reset(){
@@ -75,7 +75,6 @@ export default class Ball {
     // change the speed of balls
     changeSpeed(){
       document.addEventListener('keydown', event => {
-        console.log( `ball number: ${Number(this.index) + 1} | size: ${this.radius} | color: ${this.color} | speed: ${ Math.ceil( Math.abs(this.vx) + Math.abs(this.vy) ) / 2}`);
         switch(event.key){
           case KEYS.ballFast:
               BallOptions.speed = Math.min(BallOptions.speed + 1, BallOptions.maxSpeed);
@@ -104,6 +103,7 @@ export default class Ball {
               }
             break;
         }
+
       });
     }
 
@@ -144,5 +144,8 @@ export default class Ball {
       
       // reflect when the ball hits the paddle
       this.paddleCollision(player1, player2);
+
+      // console.log( `ball number: ${Number(this.index) + 1} | size: ${this.radius} | color: ${this.color} | speed: ${ Math.ceil( Math.abs(this.vx) + Math.abs(this.vy) ) / 2}`);
+
     } // end of render()
 }

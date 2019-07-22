@@ -19,6 +19,8 @@ export const KEYS = {
     ballSlow: 'v',
     ballBig: 'g',
     ballSmall: 'b',
+    ballPlus: 'h',
+    ballMinus: 'n',
   }
 
 // properties of Paddle
@@ -33,13 +35,16 @@ export const PaddleOptions = {
 
 // properties of Ball
 export const BallOptions = {
-    number: 1,
+    number: 1,  // must be larger than 0 
+                // must be same in Game.js reset section => BallOptions.number
+    maxBallNum: 10,
+    minBallNum: 1,
     speed: 3.5, // must be larger than 0 
-              // must be same in Game.js reset section => BallOptions.speed
+                // must be same in Game.js reset section => BallOptions.speed
     minSpeed: 1,
     maxSpeed: 10,
-    ballSize: [8],
-    maxBall: 56,
-    minBall: 4, // must be larger than 0
+    ballSize: [8, 10, 12, 14],
+    maxBallsize: 56,
+    minBallsize: 4, // must be larger than 0
     ballColor: ['#FFFFFF', 'cyan', 'yellow', 'yellowgreen']
 }

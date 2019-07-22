@@ -72,7 +72,7 @@ export default class Game {
     this.showFirstScreen = true;
     
     // keys of switches which affect gameplay
-    document.addEventListener('keydown', event => { 
+    document.addEventListener('keydown', event => {
       switch(event.key){
         case KEYS.right:
           if ( this.showFirstScreen === true ){
@@ -93,8 +93,36 @@ export default class Game {
           // reset the game properties
           this.resetGame();
           break;
+
+        // change the number of balls
+        case KEYS.ballPlus:
+          if (this.isMulti){
+            BallOptions.number = Math.min(BallOptions.number + 1, BallOptions.maxBallNum);
+          
+            let index = BallOptions.number -1;
+            let rdmIndex1 = Math.floor(Math.random() * 4);
+            let rdmIndex2 = Math.floor(Math.random() * 4);
+            
+            this.ball[`new_${index}`] = new Ball(
+              [index],
+              this.width,
+              this.height,
+              BallOptions.ballSize[rdmIndex1],
+              BallOptions.ballColor[rdmIndex2]
+            );
+            break;
+          }
+        case KEYS.ballMinus:
+          if (this.isMulti){
+            if (BallOptions.number > 1){
+              BallOptions.number = Math.max(BallOptions.number - 1, BallOptions.minBallNum);
+              let index = BallOptions.number;
+              this.ball[`new_${index}`] = undefined;
+            }
+          }
+          break;
       }
-    });
+    }); // end of keypress Event
 
     // new Object and instance for the winner
     this.winner;
@@ -131,7 +159,25 @@ export default class Game {
     }
   } // end of multiPlay()
 
+  // change the size of balls
+  changeSize(){
+    document.addEventListener('keydown', event => {
+      this.ballSize[event.key] = true;
+    });
+    document.addEventListener('keyup', event => {
+      this.ballSize[event.key] = false;
+    })
+  }
+  ballBig(ball){
+    ball.radius = Math.min( ball.radius + 2, BallOptions.maxBallsize );
+  }
+  ballSmall(ball){
+    ball.radius = Math.max( ball.radius - 2, BallOptions.minBallsize );
+  }
+
   resetGame(){
+    // reset number of balls
+    BallOptions.number = 1;
     // create a new ball for the game
     this.ball = {};
     for (let i = 0; i < BallOptions.number; i++){
@@ -159,23 +205,8 @@ export default class Game {
     
     this.ballSize = {};
     this.changeSize();
-  }
-
-  // change the size of balls
-  changeSize(){
-    document.addEventListener('keydown', event => {
-      this.ballSize[event.key] = true;
-    });
-    document.addEventListener('keyup', event => {
-      this.ballSize[event.key] = false;
-    })
-  }
-  ballBig(ball){
-    ball.radius = Math.min( ball.radius + 2, BallOptions.maxBall );
-  }
-  ballSmall(ball){
-    ball.radius = Math.max( ball.radius - 2, BallOptions.minBall );
-  }
+    
+  } // end of resetGame()
 
   render() {
     // if pause === true, render stop
