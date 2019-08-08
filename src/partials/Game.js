@@ -149,7 +149,7 @@ export default class Game {
     // Render the ball
     let i = 0;
     for (i; i < BallOptions.number; i++){
-      this.ball[`new_${i}`].render(svg, this.player1, this.player2);
+      this.ball[`new_${i}`].render(svg, this.player1, this.player2, this.ball);
     }
 
     // Update scores

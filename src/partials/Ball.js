@@ -56,8 +56,8 @@ export default class Ball {
           ){
             // add spins to the ball in response to the direction of a paddle
             let yDirection;
-            if ( player1.keyState[38] ){ yDirection = -1; } 
-            else if ( player1.keyState[40] ){ yDirection = 1; } 
+            if ( player2.keyState[38] ){ yDirection = -1; } 
+            else if ( player2.keyState[40] ){ yDirection = 1; } 
             else { yDirection = 0; }
 
             // detect paddle movement
@@ -68,8 +68,8 @@ export default class Ball {
             this.vx *= -1;
             this.ping.play(); // play the sound when paddle hits the ball          
 
-            // decrease size of the other player's paddle 
-           player1.height = this.dePaddle(player1.height);
+            // decrease size of the player's paddle 
+           player2.height = this.dePaddle(player2.height);
 
             // assign collisionTime for player 2
             this.collisionTime2 = this.gameTime + 10;
@@ -91,10 +91,8 @@ export default class Ball {
             this.vx *= -1;
             this.ping.play();
 
-            // decrease size of the other player's paddle 
-           player2.height = this.dePaddle(player2.height);
+           player1.height = this.dePaddle(player1.height);
 
-            // assign collisionTime for player 1
             this.collisionTime1 = this.gameTime + 10;
           }
       }
@@ -169,7 +167,7 @@ export default class Ball {
       if (notMoved){ player.force = 0; }
     }
 
-    render(svg, player1, player2){
+    render(svg, player1, player2, objBall){
       this.gameTime++;
       this.logPlayerPosition(player1, this.paddlePosition1);
       this.logPlayerPosition(player2, this.paddlePosition2);
@@ -204,11 +202,15 @@ export default class Ball {
       }
       if (rightGoal || leftGoal){
         this.reset();
-        player1.y = ((this.boardHeight - PaddleOptions.paddleHeight) / 2);
-        player1.height = PaddleOptions.paddleHeight;
 
-        player2.y = ((this.boardHeight - PaddleOptions.paddleHeight) / 2);
-        player2.height = PaddleOptions.paddleHeight;
+        // reset the position of paddles only the number of balls is greater than 1
+        if ( Object.keys(objBall).length === 1){
+          player1.y = ((this.boardHeight - PaddleOptions.paddleHeight) / 2);
+          player1.height = PaddleOptions.paddleHeight;
+
+          player2.y = ((this.boardHeight - PaddleOptions.paddleHeight) / 2);
+          player2.height = PaddleOptions.paddleHeight;
+        }
       }
     
       // bounce when the ball hits the walls
@@ -216,8 +218,6 @@ export default class Ball {
       
       // reflect when the ball hits the paddle
       this.paddleCollision(player1, player2);
-
-      // console.log( `ball number: ${Number(this.index) + 1} | size: ${this.radius} | color: ${this.color} | speed: ${ Math.ceil( Math.abs(this.vx) + Math.abs(this.vy) ) / 2}`);
 
     } // end of render()
 }
