@@ -18,22 +18,7 @@ export default class Game {
     this.gameElement = document.getElementById(this.element);
     
     // initiate the first screen of game
-    this.initPlayer1 = new Init(
-      (this.width / 2) - 100, 
-      (this.height / 2) + 8, 
-      '> Single',
-    );
-    this.initPlayer2 = new Init(
-      (this.width / 2) + 100, 
-      (this.height / 2) + 8, 
-      '> Multi',
-    );
-    this.caption = new Init(
-      this.width / 2,
-      this.height - 20,
-      'Press <- or -> to select the mode and hit <Enter>',
-      12
-    );
+    this.initFirstScr();
 
     // create the board and net with same size of the SVG container
     this.board = new Board(this.width, this.height);
@@ -93,7 +78,7 @@ export default class Game {
           // reset the game properties
           this.resetGame();
           break;
-
+          
         // change the number of balls
         case KEYS.ballPlus:
           if (this.isMulti){
@@ -131,6 +116,25 @@ export default class Game {
   } /* 
     // end of constructor
     */
+
+  initFirstScr(){
+    this.initPlayer1 = new Init(
+      (this.width / 2) - 100, 
+      (this.height / 2) + 8, 
+      '> Single',
+    );
+    this.initPlayer2 = new Init(
+      (this.width / 2) + 100, 
+      (this.height / 2) + 8, 
+      '> Multi',
+    );
+    this.caption = new Init(
+      this.width / 2,
+      this.height - 20,
+      'Press <- or -> to select the mode and hit <Enter>',
+      12
+    );
+  }
   
   multiPlay(svg){
     // Render the net
@@ -237,7 +241,7 @@ export default class Game {
     
     // Assign who is the winner
     this.winner = this.displayWinner.winnerIs(this.player1.score, this.player2.score);
-    
+  
     // Display the winner of the game
     if ( this.winner ) {
       this.displayWinner.render(svg, this.winner);
