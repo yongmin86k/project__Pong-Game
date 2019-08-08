@@ -61,7 +61,7 @@ export default class Ball {
             this.ping.play(); // play the sound when paddle hits the ball          
 
             // decrease size of the other player's paddle 
-            player1.height = Math.max(player1.height - 8, 16);
+            player1.height = this.dePaddle(player1.height);
 
             // assign collisionTime for player 2
             this.collisionTime2 = this.gameTime + 10;
@@ -77,7 +77,7 @@ export default class Ball {
             this.ping.play();
 
             // decrease size of the other player's paddle 
-            player2.height = Math.max(player2.height - 8, 16);
+            player2.height = this.dePaddle(player2.height);
 
             // assign collisionTime for player 1
             this.collisionTime1 = this.gameTime + 10;
@@ -137,6 +137,11 @@ export default class Ball {
         }
 
       });
+    }
+
+    // decrease the size of opponent's paddle
+    dePaddle(paddle){
+      return Math.max(paddle - 8, PaddleOptions.paddleMinHeight);
     }
 
     render(svg, player1, player2){
