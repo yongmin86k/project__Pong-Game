@@ -116,7 +116,7 @@ export default class Ball {
     
     goal(player) {
       player.score++;
-      this.reset();
+      // this.reset();
     }
 
     // change the speed of balls
@@ -156,7 +156,7 @@ export default class Ball {
 
     // decrease the size of opponent's paddle
     dePaddle(paddle){
-      return Math.max(paddle - 4, PaddleOptions.paddleMinHeight);
+      return Math.max(paddle - 8, PaddleOptions.paddleMinHeight);
     }
 
     logPlayerPosition(player, recordPos){
@@ -201,6 +201,14 @@ export default class Ball {
       } else if ( leftGoal ){
         this.direction = -1;
         this.goal(player2);
+      }
+      if (rightGoal || leftGoal){
+        this.reset();
+        player1.y = ((this.boardHeight - PaddleOptions.paddleHeight) / 2);
+        player1.height = PaddleOptions.paddleHeight;
+
+        player2.y = ((this.boardHeight - PaddleOptions.paddleHeight) / 2);
+        player2.height = PaddleOptions.paddleHeight;
       }
     
       // bounce when the ball hits the walls
