@@ -16,6 +16,9 @@ export default class Ball {
       this.collisionTime1 = 0;
       this.collisionTime2 = 0;
 
+      this.paddlePosition1 = [];
+      this.paddlePosition2 = [];
+
       this.reset();
       this.changeSpeed();
       
@@ -27,14 +30,6 @@ export default class Ball {
       this.vx = 0;
       this.vy = 0;
 
-      // Randomize ball direction of going up or down
-/*      this.upOrDown = Math.round(Math.random() * 10) <= 5 ? 1 : -1;
-      this.vx = this.direction * Math.random() * BallOptions.speed;
-      this.vy = 0;
-      while ( this.vy === 0 ){
-        this.vy = this.upOrDown * this.vx;
-      }
-*/
       this.vx = this.direction * BallOptions.speed;
       this.vy = 0;
 
@@ -54,40 +49,57 @@ export default class Ball {
 
     paddleCollision(player1, player2) {
       if (this.vx > 0) { // moving right
-        // collision detection for right paddle
+        // collision detection for player2
         if ( this.x + this.radius >= player2.x && 
           this.x + this.radius <= player2.x + player2.width &&
           ( this.y >= player2.y && this.y <= player2.y + player2.height )
           ){
-            // if true then there's a collision
+            // add spins to the ball in response to the direction of a paddle
+            let yDirection;
+            if ( player1.keyState[38] ){ yDirection = -1; } 
+            else if ( player1.keyState[40] ){ yDirection = 1; } 
+            else { yDirection = 0; }
+
+            // detect paddle movement
+            // if not moved, return force = 0
+            this.detectMovement(player2, this.paddlePosition2);
+
+            this.vy += (yDirection * player2.force) / 2;
             this.vx *= -1;
             this.ping.play(); // play the sound when paddle hits the ball          
 
             // decrease size of the other player's paddle 
-            player1.height = this.dePaddle(player1.height);
+           player1.height = this.dePaddle(player1.height);
 
             // assign collisionTime for player 2
             this.collisionTime2 = this.gameTime + 10;
-
         }
       } else { // moving left
-        // collision detection for left paddle
-        if ( this.x - this.radius >= player1.x && // left edge of the ball is
+        // collision detection for player1
+        if ( this.x - this.radius >= player1.x && 
           this.x - this.radius <= player1.x + player1.width &&
           (this.y >= player1.y && this.y <= player1.y + player1.height) 
           ){
+            let yDirection;
+            if ( player1.keyState[65] ){ yDirection = -1; } 
+            else if ( player1.keyState[90] ){ yDirection = 1; } 
+            else { yDirection = 0; }
+
+            this.detectMovement(player1, this.paddlePosition1);
+
+            this.vy += (yDirection * player1.force) / 2;
             this.vx *= -1;
             this.ping.play();
 
             // decrease size of the other player's paddle 
-            player2.height = this.dePaddle(player2.height);
+           player2.height = this.dePaddle(player2.height);
 
             // assign collisionTime for player 1
             this.collisionTime1 = this.gameTime + 10;
           }
       }
       
-      // // changes paddle color
+      // changes paddle color
       if (this.gameTime < this.collisionTime1){
         player1.color = 'white';
       } else {
@@ -144,11 +156,23 @@ export default class Ball {
 
     // decrease the size of opponent's paddle
     dePaddle(paddle){
-      return Math.max(paddle - 8, PaddleOptions.paddleMinHeight);
+      return Math.max(paddle - 4, PaddleOptions.paddleMinHeight);
+    }
+
+    logPlayerPosition(player, recordPos){
+      recordPos.unshift(player.y);
+      if (recordPos.length > 5){ recordPos.pop(); }
+    }
+    
+    detectMovement(player, recordPos){
+      const notMoved = recordPos.every(pos=> pos === recordPos[0])
+      if (notMoved){ player.force = 0; }
     }
 
     render(svg, player1, player2){
       this.gameTime++;
+      this.logPlayerPosition(player1, this.paddlePosition1);
+      this.logPlayerPosition(player2, this.paddlePosition2);
       
       // initiate the ball moving after intervalGameTime(settings.js)
       if (this.gameTime < GameOptions.intervalGameTime){

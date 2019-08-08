@@ -26,12 +26,13 @@ export const KEYS = {
 // properties of Paddle
 export const PaddleOptions = {
     paddleWidth : 8,
-    paddleHeight : 88,
-    paddleMinHeight : 16,
+    paddleHeight : 72,
+    paddleMinHeight : 32,
     boardGap : 10,
     player1Color: '#FF0000',
     player2Color: '#00FFFF',
-    speed: 5,
+    speed: 1,
+    force: 0.2,
 }
 
 // properties of Ball

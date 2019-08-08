@@ -1,13 +1,14 @@
 import { SVG_NS, KEYS, PaddleOptions } from "../settings";
 
 export default class Paddle {
-    constructor(boardHeight, width, height, x, y, color = '#FFFFFF', upKey, downKey) {
+    constructor(boardHeight, width, height, x, y, force = 0, color = '#FFFFFF', upKey, downKey) {
         this.boardHeight = boardHeight;
         this.width = width;
         this.height = height;
         this.x = x;
         this.y = y;
         this.speed = PaddleOptions.speed;
+        this.force = force;
         this.score = 0;
         this.color = color;
         this.upKey = upKey;
@@ -19,18 +20,23 @@ export default class Paddle {
             this.keyState[event.keyCode] = true;
         });
         document.addEventListener('keyup', event => {
+            this.force = 0;
             this.keyState[event.keyCode] = false;
         });
     } // end of constructor
 
     up(){
         // move the paddle up but not above the top of the board
-        this.y = Math.max( this.y - this.speed, 0 );
+        const speed = this.speed + this.force;
+        this.y = Math.max( this.y - speed, 0 );
+        this.force += PaddleOptions.force;
     }
 
     down(){
         // move the paddle down but not more than the bottom of the board
-        this.y = Math.min( this.y + this.speed, (this.boardHeight - this.height) );
+        const speed = this.speed + this.force;
+        this.y = Math.min( this.y + speed, (this.boardHeight - this.height) );
+        this.force += PaddleOptions.force;
     }
     
     render(svg) {
