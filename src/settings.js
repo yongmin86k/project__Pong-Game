@@ -32,7 +32,7 @@ export const PaddleOptions = {
     player1Color: '#FF0000',
     player2Color: '#00FFFF',
     speed: 1,
-    force: 0.2,
+    force: 0.25,
 }
 
 // properties of Ball

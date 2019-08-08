@@ -19,6 +19,8 @@ export default class Ball {
       this.paddlePosition1 = [];
       this.paddlePosition2 = [];
 
+      this.ballSpeed = 0.3;
+
       this.reset();
       this.changeSpeed();
       
@@ -65,11 +67,12 @@ export default class Ball {
             this.detectMovement(player2, this.paddlePosition2);
 
             this.vy += (yDirection * player2.force) / 2;
-            this.vx *= -1;
+            // speed up
+            this.vx = Math.min(Math.abs(this.vx + this.ballSpeed), 8.5) * -1;
             this.ping.play(); // play the sound when paddle hits the ball          
 
             // decrease size of the player's paddle 
-           player2.height = this.dePaddle(player2.height);
+            player2.height = this.dePaddle(player2.height);
 
             // assign collisionTime for player 2
             this.collisionTime2 = this.gameTime + 10;
@@ -88,10 +91,11 @@ export default class Ball {
             this.detectMovement(player1, this.paddlePosition1);
 
             this.vy += (yDirection * player1.force) / 2;
-            this.vx *= -1;
+            // speed up
+            this.vx = Math.min(Math.abs(this.vx) + this.ballSpeed, 8.5);
             this.ping.play();
 
-           player1.height = this.dePaddle(player1.height);
+            player1.height = this.dePaddle(player1.height);
 
             this.collisionTime1 = this.gameTime + 10;
           }
@@ -122,7 +126,6 @@ export default class Ball {
       document.addEventListener('keydown', event => {
         switch(event.keyCode){
           case KEYS.ballFast:
-              BallOptions.speed = Math.min(BallOptions.speed + 1, BallOptions.maxSpeed);
               if ( this.vx > 0){ 
                 this.vx = Math.min(this.vx + 1, BallOptions.maxSpeed);
               } else { 
@@ -135,7 +138,6 @@ export default class Ball {
               }
             break;
           case KEYS.ballSlow:
-              BallOptions.speed = Math.max(BallOptions.speed - 1, BallOptions.minSpeed);
               if ( this.vx > 0){ 
                 this.vx = Math.max(this.vx - 1, BallOptions.minSpeed);
               } else { 
@@ -179,7 +181,6 @@ export default class Ball {
         this.x += this.vx; 
         this.y += this.vy;  
       } 
-
       // create a ball
       let circle = document.createElementNS(SVG_NS, 'circle');
         circle.setAttributeNS(null, 'r', this.radius);
