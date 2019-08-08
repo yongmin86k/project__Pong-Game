@@ -16,10 +16,10 @@ export default class Paddle {
         this.keyState = {}; // update which keys are pressing
 
         document.addEventListener('keydown', event => {
-            this.keyState[event.key] = true;
+            this.keyState[event.keyCode] = true;
         });
         document.addEventListener('keyup', event => {
-            this.keyState[event.key] = false;
+            this.keyState[event.keyCode] = false;
         });
     } // end of constructor
 

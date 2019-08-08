@@ -58,7 +58,7 @@ export default class Game {
     
     // keys of switches which affect gameplay
     document.addEventListener('keydown', event => {
-      switch(event.key){
+      switch(event.keyCode){
         case KEYS.right:
           if ( this.showFirstScreen === true ){
             this.isMulti = !this.isMulti;
@@ -166,10 +166,10 @@ export default class Game {
   // change the size of balls
   changeSize(){
     document.addEventListener('keydown', event => {
-      this.ballSize[event.key] = true;
+      this.ballSize[event.keyCode] = true;
     });
     document.addEventListener('keyup', event => {
-      this.ballSize[event.key] = false;
+      this.ballSize[event.keyCode] = false;
     })
   }
   ballBig(ball){

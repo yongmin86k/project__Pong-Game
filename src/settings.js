@@ -7,20 +7,20 @@ export const GameOptions = {
 
 // key setting for the player 1 and player 2
 export const KEYS = {
-    right: 'ArrowRight',
-    left: 'ArrowLeft',
-    a: 'a',        // player 1 up key
-    z: 'z',        // player 1 down key
-    up: 'ArrowUp',       // player 2 up key
-    down: 'ArrowDown',     // player 2 down key
-    spaceBar: ' ', // we'll use this later...
-    enter: 'Enter',
-    ballFast: 'f',
-    ballSlow: 'v',
-    ballBig: 'g',
-    ballSmall: 'b',
-    ballPlus: 'h',
-    ballMinus: 'n',
+    right: 39,
+    left: 37,
+    a: 65,        
+    z: 90,        
+    up: 38, 
+    down: 40,
+    spaceBar: 32,
+    enter: 13,
+    ballFast: 70,
+    ballSlow: 86,
+    ballBig: 71,
+    ballSmall: 66,
+    ballPlus: 72,
+    ballMinus: 78,
   }
 
 // properties of Paddle
@@ -31,7 +31,7 @@ export const PaddleOptions = {
     boardGap : 10,
     player1Color: '#FF0000',
     player2Color: '#00FFFF',
-    speed: 10,
+    speed: 5,
 }
 
 // properties of Ball

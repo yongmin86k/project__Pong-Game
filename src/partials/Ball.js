@@ -28,13 +28,16 @@ export default class Ball {
       this.vy = 0;
 
       // Randomize ball direction of going up or down
-      this.upOrDown = Math.round(Math.random() * 10) <= 5 ? 1 : -1;
+/*      this.upOrDown = Math.round(Math.random() * 10) <= 5 ? 1 : -1;
       this.vx = this.direction * Math.random() * BallOptions.speed;
       this.vy = 0;
       while ( this.vy === 0 ){
         this.vy = this.upOrDown * this.vx;
       }
-      
+*/
+      this.vx = this.direction * BallOptions.speed;
+      this.vy = 0;
+
       // Reset the time when either player scores
       if (this.gameTime >= GameOptions.intervalGameTime ){ 
         this.gameTime = 0;
@@ -107,7 +110,7 @@ export default class Ball {
     // change the speed of balls
     changeSpeed(){
       document.addEventListener('keydown', event => {
-        switch(event.key){
+        switch(event.keyCode){
           case KEYS.ballFast:
               BallOptions.speed = Math.min(BallOptions.speed + 1, BallOptions.maxSpeed);
               if ( this.vx > 0){ 
