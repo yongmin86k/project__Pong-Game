@@ -29,6 +29,7 @@ export default class Game {
 
     // create new paddles for the each players
     this.player1 = new Paddle(
+      'player1',
       this.height,
       PaddleOptions.paddleWidth,
       PaddleOptions.paddleHeight,
@@ -40,6 +41,7 @@ export default class Game {
       KEYS.z,
     );
     this.player2 = new Paddle(
+      'player2',
       this.height,
       PaddleOptions.paddleWidth,
       PaddleOptions.paddleHeight,

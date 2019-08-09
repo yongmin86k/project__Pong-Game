@@ -49,7 +49,7 @@ export default class Ball {
       if (hitTop || hitBottom ){ this.vy *= -1; }
     }
 
-    paddleCollision(player1, player2) {
+    paddleCollision(player1, player2, objBall) {
       if (this.vx > 0) { // moving right
         // collision detection for player2
         if ( this.x + this.radius >= player2.x && 
@@ -62,20 +62,12 @@ export default class Ball {
             else if ( player2.keyState[40] ){ yDirection = 1; } 
             else { yDirection = 0; }
 
+            this.fxCollision(yDirection, player2);
+
             // detect paddle movement
             // if not moved, return force = 0
             this.detectMovement(player2, this.paddlePosition2);
 
-            this.vy += (yDirection * player2.force) / 2;
-            // speed up
-            this.vx = Math.min(Math.abs(this.vx + this.ballSpeed), 8.5) * -1;
-            this.ping.play(); // play the sound when paddle hits the ball          
-
-            // decrease size of the player's paddle 
-            player2.height = this.dePaddle(player2.height);
-
-            // assign collisionTime for player 2
-            this.collisionTime2 = this.gameTime + 10;
         }
       } else { // moving left
         // collision detection for player1
@@ -88,6 +80,8 @@ export default class Ball {
             else if ( player1.keyState[90] ){ yDirection = 1; } 
             else { yDirection = 0; }
 
+            this.fxCollision(yDirection, player1);
+
             this.detectMovement(player1, this.paddlePosition1);
 
             this.vy += (yDirection * player1.force) / 2;
@@ -98,6 +92,7 @@ export default class Ball {
             player1.height = this.dePaddle(player1.height);
 
             this.collisionTime1 = this.gameTime + 10;
+            
           }
       }
       
@@ -154,11 +149,6 @@ export default class Ball {
       });
     }
 
-    // decrease the size of opponent's paddle
-    dePaddle(paddle){
-      return Math.max(paddle - 8, PaddleOptions.paddleMinHeight);
-    }
-
     logPlayerPosition(player, recordPos){
       recordPos.unshift(player.y);
       if (recordPos.length > 5){ recordPos.pop(); }
@@ -167,6 +157,39 @@ export default class Ball {
     detectMovement(player, recordPos){
       const notMoved = recordPos.every(pos=> pos === recordPos[0])
       if (notMoved){ player.force = 0; }
+    }
+
+    // functions of paddle collision
+    fxCollision(direction, player){
+      this.vy += (direction * player.force) / 2;
+      // speed up
+      console.log(player);
+      if (player.name === 'player1'){
+        this.vx = Math.min(Math.abs(this.vx) + this.ballSpeed, 8.5);
+      } else {
+        this.vx = Math.min(Math.abs(this.vx + this.ballSpeed), 8.5) * -1;
+      }
+
+      this.ping.play(); // play the sound when paddle hits the ball          
+
+      // decrease size of the player's paddle 
+      player.height = this.dePaddle(player.height);
+
+      // assign collisionTime for player 2
+      this.collisionTime2 = this.gameTime + 10;
+    }
+
+    // decrease the size of opponent's paddle
+    dePaddle(paddle){
+      return Math.max(paddle - 8, PaddleOptions.paddleMinHeight);
+    }
+
+    showGuideline(svg, objBall){   
+      Object.keys(objBall).forEach(key=>{
+        // console.log(objBall[key].x, objBall[key].y, objBall[key].vx, objBall[key].vy);
+      });
+      
+      // console.log(objBall, this.boardWidth, this.boardHeight);
     }
 
     render(svg, player1, player2, objBall){
@@ -218,7 +241,10 @@ export default class Ball {
       this.wallCollision(this.gameTime);
       
       // reflect when the ball hits the paddle
-      this.paddleCollision(player1, player2);
+      this.paddleCollision(player1, player2, objBall, svg);
+
+      // show the guideline of the ball direction
+      this.showGuideline(svg, objBall);
 
     } // end of render()
 }
