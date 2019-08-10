@@ -3,6 +3,7 @@ export const SVG_NS  = 'http://www.w3.org/2000/svg';
 export const GameOptions = {
     winningScore: 10,
     intervalGameTime: 30, // unit is FPS
+    displayGuideline: true,
 }
 
 // key setting for the player 1 and player 2
@@ -21,6 +22,7 @@ export const KEYS = {
     ballSmall: 66,
     ballPlus: 72,
     ballMinus: 78,
+    toggleGuideline: 82,
   }
 
 // properties of Paddle
@@ -45,7 +47,7 @@ export const BallOptions = {
                 // must be same in Game.js reset section => BallOptions.speed
     minSpeed: 1,
     maxSpeed: 10,
-    ballSize: [8, 10, 12, 14],
+    ballSize: [4, 10, 12, 14],
     maxBallsize: 56,
     minBallsize: 4, // must be larger than 0
     ballColor: ['rgba(240,240,240,0.8)', 'rgba(37,212,255,0.6)', 'rgba(255,252,37,0.6)', 'rgba(40,255,37,0.6)']
