@@ -58,10 +58,8 @@ export default class Ball {
     paddleCollision(player1, player2, objBall) {
       if (this.vx > 0) { // moving right
         // collision detection for player2
-        if ( this.x + this.radius >= player2.x && 
-          this.x + this.radius <= player2.x + player2.width &&
-          ( this.y >= player2.y && this.y <= player2.y + player2.height )
-          ){
+        if ((this.x + this.radius >= player2.x && this.x - this.radius <= player2.x + player2.width) &&
+          (this.y >= player2.y && this.y <= player2.y + player2.height)){
             // add spins to the ball in response to the direction of a paddle
             let yDirection;
             if ( player2.keyState[38] ){ yDirection = -1; } 
@@ -73,10 +71,8 @@ export default class Ball {
         }
       } else { // moving left
         // collision detection for player1
-        if ( this.x - this.radius >= player1.x && 
-          this.x - this.radius <= player1.x + player1.width &&
-          (this.y >= player1.y && this.y <= player1.y + player1.height) 
-          ){
+        if ((this.x + this.radius >= player1.x && this.x - this.radius <= player1.x + player1.width) &&
+          (this.y >= player1.y && this.y <= player1.y + player1.height)){
             let yDirection;
             if ( player1.keyState[65] ){ yDirection = -1; } 
             else if ( player1.keyState[90] ){ yDirection = 1; } 
@@ -200,7 +196,7 @@ export default class Ball {
 
         let numCollision = Math.ceil((totaltime - firstTimeCl) / avrTimeCl), 
             remainTimeCl = (totaltime - firstTimeCl) % avrTimeCl,
-            lineX, lineY, vectorDirection = 1,
+            lineX, lineY, vectorDirection = 1, yVectorDirection,
             i;
         
         // start point of the guideline
@@ -212,20 +208,26 @@ export default class Ball {
           // wall collision
           for (i = 0; i < (numCollision + 1); i++){
             switch (i){
+
               case 0 :
                 // first collision
+                yVectorDirection = Math.sign(ballVy);
+                         
                 lineX = ballX + (firstTimeCl * ballVx);
+                // lineY = ballY + (firstTimeCl * ballVy) - (this.radius * yVectorDirection );
                 lineY = ballY + (firstTimeCl * ballVy);
+                
                 vectorDirection *= -1;
-
                 this.moveTo['l'].push(`L${lineX} ${lineY}`);
                 break;
+
               case numCollision :
                 // last collision
                 lineX = ballVx < 0 ? PaddleOptions.boardGap + PaddleOptions.paddleWidth : totalWidth;
+                
                 lineY = Math.min(lineY + (vectorDirection * remainTimeCl * ballVy), totalHeight);
+                
                 vectorDirection *= -1;
-
                 this.moveTo['l'].push(`L${lineX} ${lineY}`);
                 break;
               default:
@@ -251,6 +253,7 @@ export default class Ball {
         } // end end point if
 
       }); // end Object forEach
+      // console.log(this.moveTo['l']);
     }
 
     render(svg, player1, player2, objBall){
