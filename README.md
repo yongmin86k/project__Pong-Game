@@ -34,6 +34,8 @@ Read more about the [Parcel web application bundler here](https://parceljs.org/)
 &nbsp;
 ## Keys
 
+![Preview](src/images/preview_game_keyboard.png)
+
 ### - Player 1
 - Up : `a`
 - Down : `z`

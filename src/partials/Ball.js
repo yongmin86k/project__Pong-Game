@@ -186,7 +186,7 @@ export default class Ball {
 
     // toggle the guideline of the ball direction
     toggleGuideLine(objBall){
-      console.log(objBall);
+
       Object.keys(objBall).forEach(key => {
         let startLineX = objBall[key].x,
             startLineY = objBall[key].y,
