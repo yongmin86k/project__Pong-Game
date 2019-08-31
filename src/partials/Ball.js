@@ -259,8 +259,12 @@ export default class Ball {
       if (this.gameTime < GameOptions.intervalGameTime){
         this.reset();
       } else {
-        this.x += this.vx; 
-        this.y += this.vy;  
+        this.x += this.vx;
+        if ( this.vy < 0){
+          this.y = Math.max( this.y + this.vy, this.radius-1);
+        } else {
+          this.y = Math.min( this.y + this.vy, this.boardHeight-this.radius+1);
+        }
       } 
       // create a ball
       let circle = document.createElementNS(SVG_NS, 'circle');
