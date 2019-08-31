@@ -1,4 +1,4 @@
-# Pong Game Starter
+# Pong Game Starter - v0.5.0
 
 A starter project for a basic pong game using SVGs.
 

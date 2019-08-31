@@ -8,21 +8,21 @@ export const GameOptions = {
 
 // key setting for the player 1 and player 2
 export const KEYS = {
-    right: 39,
-    left: 37,
-    a: 65,        
-    z: 90,        
-    up: 38, 
-    down: 40,
-    spaceBar: 32,
-    enter: 13,
-    ballFast: 70,
-    ballSlow: 86,
-    ballBig: 71,
-    ballSmall: 66,
-    ballPlus: 72,
-    ballMinus: 78,
-    toggleGuideline: 82,
+    right: 39,              // ▶
+    left: 37,               // ◀︎
+    a: 65,                  // a
+    z: 90,                  // z
+    up: 38,                 // ▲
+    down: 40,               // ▼
+    spaceBar: 32,           // space
+    enter: 13,              // enter
+    ballFast: 70,           // f
+    ballSlow: 86,           // v
+    ballBig: 71,            // g
+    ballSmall: 66,          // b
+    ballPlus: 72,           // h
+    ballMinus: 78,          // n
+    toggleGuideline: 82,    // r
   }
 
 // properties of Paddle

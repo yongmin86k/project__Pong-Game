@@ -106,7 +106,7 @@ export default class Game {
             if (BallOptions.number > 1){
               BallOptions.number = Math.max(BallOptions.number - 1, BallOptions.minBallNum);
               let index = BallOptions.number;
-              this.ball[`new_${index}`] = undefined;
+              delete this.ball[`new_${index}`];
             }
           }
           break;
