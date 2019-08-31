@@ -21,14 +21,14 @@ export default class Ball {
 
       this.ballSpeed = 0.3; // Speed increment every time hits the paddle
 
-      this.moveTo = {l:[]};
+      this.moveTo = {};
 
-      this.reset();
+      // this.reset();
       this.changeSpeed();
       
     } // end of constructor
 
-    reset(){
+    reset(objBall){
       this.x = this.boardWidth / 2;
       this.y = this.boardHeight / 2;
       this.vx = 0;
@@ -37,9 +37,14 @@ export default class Ball {
       this.vx = this.direction * BallOptions.speed;
       this.vy = 0;
 
-      
-      this.moveTo['m'] = '';
-      this.moveTo['l'] = [];
+      // Reset the guidelines for each balls
+      Object.keys(objBall).forEach(key => {
+        this.moveTo[key] = {};
+        this.moveTo[key]['m'] = '';
+        this.moveTo[key]['l'] = [];
+      });
+      // this.moveTo['m'] = '';
+      // this.moveTo['l'] = [];
       
       // Reset the time when either player scores
       if (this.gameTime >= GameOptions.intervalGameTime ){ 
@@ -143,7 +148,11 @@ export default class Ball {
     // functions of paddle collision
     fxCollision(direction, player, objBall){ 
       // reset the guideline
-      this.moveTo['l'] = [];
+      Object.keys(objBall).forEach(key => {
+        if ( this.moveTo[key] ) {
+          this.moveTo[key]['l'] = [];
+        }
+      });
       
       // speed up
       if (player.name === 'player1'){
@@ -186,69 +195,84 @@ export default class Ball {
             moveHeight = startLineY + (this.vy * moveTime),
             detectCollision;
 
-        // Detect Collision
-        if (
-        (moveHeight < 0 + this.radius ) ||
-        (moveHeight > this.boardHeight - this.radius )
-        ) { detectCollision = true; } 
-        else { detectCollision = false;}
-        
-        // Start coordinates of the guideline
-        this.moveTo['m'] = `M${startLineX} ${startLineY}`;
+        // fix error when playing with  multi balls
+        if ( startLineX <= ballGapWidth || startLineX >= this.boardWidth - ballGapWidth ){
 
-        if ( detectCollision === false && this.vx < 0 ){
-          // Move left without collisions
-          this.moveTo['l'].push(`L${ballGapWidth} ${moveHeight}`);
-        } else if ( detectCollision === false && this.vx > 0 ){
-          // Move right without collisions
-          this.moveTo['l'].push(`L${this.boardWidth - ballGapWidth} ${moveHeight}`);
-        } else {
-          // with collisions
-          let timeCollisionFirst,
-              timeCollisionLast,
-              timeCollisionDefault,
-              numCollision,
-              lineX, lineY,
-              vectorDirectionY = 1;
+          // Detect Collision
+          if (
+            (moveHeight < 0 + this.radius ) ||
+            (moveHeight > this.boardHeight - this.radius )
+            ) { detectCollision = true; } 
+            else { detectCollision = false;}
             
-            if ( this.vy < 0){
-              // Move up
-              timeCollisionFirst = Math.abs((this.radius - startLineY) / this.vy);
-            } else {
-              // Move down
-              timeCollisionFirst = Math.abs((this.boardHeight - this.radius - startLineY) / this.vy);
+            // Start coordinates of the guideline
+            if ( this.moveTo[key] ) {
+              this.moveTo[key]['m'] = `M${startLineX} ${startLineY}`;
             }
-            timeCollisionDefault = Math.abs((this.boardHeight - (2 * this.radius)) / this.vy);
-            timeCollisionLast = (moveTime - timeCollisionFirst) % timeCollisionDefault;
-            numCollision = Math.ceil((moveTime - timeCollisionFirst) / timeCollisionDefault);
-
-            for ( let i=0; i < numCollision + 1; i++){
-              switch (i){
-                // first collision coordinates
-                case 0 : 
-                  lineX = startLineX + (this.vx * timeCollisionFirst);
-                  lineY = startLineY + (this.vy * timeCollisionFirst);
-                  this.moveTo['l'].push(`L${ lineX } ${ lineY }`);
-                  break;
-
-                // last collision coordinates
-                case numCollision :
-                  vectorDirectionY *= -1;
-                  lineX = this.vx < 0 ? ballGapWidth : this.boardWidth - ballGapWidth;
-                  lineY = Math.min( lineY + ( vectorDirectionY * timeCollisionLast * this.vy ), this.boardHeight - ( 2 * this.radius) )
-                  this.moveTo['l'].push(`L${ lineX } ${ lineY }`);
-                  break;
-
-                default :
-                  vectorDirectionY *= -1;
-                  lineX = lineX + (timeCollisionDefault * this.vx);
-                  lineY = Math.min( lineY + ( vectorDirectionY * timeCollisionDefault * this.vy ), this.boardHeight - ( 2 * this.radius) )
-                  this.moveTo['l'].push(`L${ lineX } ${ lineY }`);
-              } // end switch
-            } // end forLoop
-        } // end if
+            
+            if ( detectCollision === false && this.vx < 0 ){
+              // Move left without collisions
+              if ( this.moveTo[key] ) {
+                this.moveTo[key]['l'].push(`L${ballGapWidth} ${moveHeight}`);
+              }
+            } else if ( detectCollision === false && this.vx > 0 ){
+              // Move right without collisions
+              if ( this.moveTo[key] ) {
+                this.moveTo[key]['l'].push(`L${this.boardWidth - ballGapWidth} ${moveHeight}`);
+              }
+            } else {
+              // with collisions
+              let timeCollisionFirst,
+                  timeCollisionLast,
+                  timeCollisionDefault,
+                  numCollision,
+                  lineX, lineY,
+                  vectorDirectionY = 1;
+                
+                if ( this.vy < 0){
+                  // Move up
+                  timeCollisionFirst = Math.abs((this.radius - startLineY) / this.vy);
+                } else {
+                  // Move down
+                  timeCollisionFirst = Math.abs((this.boardHeight - this.radius - startLineY) / this.vy);
+                }
+                timeCollisionDefault = Math.abs((this.boardHeight - (2 * this.radius)) / this.vy);
+                timeCollisionLast = (moveTime - timeCollisionFirst) % timeCollisionDefault;
+                numCollision = Math.ceil((moveTime - timeCollisionFirst) / timeCollisionDefault);
+    
+                if ( this.moveTo[key] ) {
+                  for ( let i=0; i < numCollision + 1; i++){
+                    switch (i){
+                      // first collision coordinates
+                      case 0 : 
+                        lineX = startLineX + (this.vx * timeCollisionFirst);
+                        lineY = startLineY + (this.vy * timeCollisionFirst);
+                        // this.moveTo['l'].push(`L${ lineX } ${ lineY }`);
+                        this.moveTo[key]['l'].push(`L${ lineX } ${ lineY }`);
+                        break;
+      
+                      // last collision coordinates
+                      case numCollision :
+                        vectorDirectionY *= -1;
+                        lineX = this.vx < 0 ? ballGapWidth : this.boardWidth - ballGapWidth;
+                        lineY = Math.min( lineY + ( vectorDirectionY * timeCollisionLast * this.vy ), this.boardHeight - ( 2 * this.radius) )
+                        // this.moveTo['l'].push(`L${ lineX } ${ lineY }`);
+                        this.moveTo[key]['l'].push(`L${ lineX } ${ lineY }`);
+                        break;
+      
+                      default :
+                        vectorDirectionY *= -1;
+                        lineX = lineX + (timeCollisionDefault * this.vx);
+                        lineY = Math.min( lineY + ( vectorDirectionY * timeCollisionDefault * this.vy ), this.boardHeight - ( 2 * this.radius) )
+                        // this.moveTo['l'].push(`L${ lineX } ${ lineY }`);
+                        this.moveTo[key]['l'].push(`L${ lineX } ${ lineY }`);
+                    } // end switch
+                  } // end forLoop
+                } // end if a ball exists
+            } // end if ball movements
+        } // end if fix bug for multi balls
       }); // end Object forEach
-    }
+    } // end toggleGuideLine()
 
     render(svg, player1, player2, objBall){
       this.gameTime++;
@@ -257,7 +281,7 @@ export default class Ball {
       
       // initiate the ball moving after intervalGameTime(settings.js)
       if (this.gameTime < GameOptions.intervalGameTime){
-        this.reset();
+        this.reset(objBall);
       } else {
         this.x += this.vx;
         if ( this.vy < 0){
@@ -287,7 +311,7 @@ export default class Ball {
         this.goal(player2);
       }
       if (rightGoal || leftGoal){
-        this.reset();
+        this.reset(objBall);
 
         // reset the position of paddles only the number of balls is greater than 1
         if ( Object.keys(objBall).length === 1){
@@ -305,19 +329,27 @@ export default class Ball {
       // reflect when the ball hits the paddle
       this.paddleCollision(player1, player2, objBall);
 
+      // toggle guidelines with the key
       document.addEventListener('keydown', e => {
         if (e.keyCode === KEYS.toggleGuideline){
           GameOptions.displayGuideline = !GameOptions.displayGuideline;
         };
       });
+
+      // render guidelines
+      
       if (GameOptions.displayGuideline === true){
-        let path = document.createElementNS(SVG_NS, 'path');
-          path.setAttributeNS(null, 'd', `${this.moveTo['m']} ${this.moveTo['l'].join(' ')}`);
-          path.setAttributeNS(null, 'fill', 'none');
-          path.setAttributeNS(null, 'stroke', 'rgba(255, 255, 255, 0.3)');
-          path.setAttributeNS(null, 'stroke-width', 2);
-          path.setAttributeNS(null, 'stroke-dasharray', [2, 8]);
-          svg.appendChild(path);
+        Object.keys(objBall).forEach(key => {
+          if ( this.moveTo[key] ){
+            let path = document.createElementNS(SVG_NS, 'path');
+            path.setAttributeNS(null, 'd', `${this.moveTo[key]['m']} ${this.moveTo[key]['l'].join(' ')}`);
+            path.setAttributeNS(null, 'fill', 'none');
+            path.setAttributeNS(null, 'stroke', 'rgba(255, 255, 255, 0.3)');
+            path.setAttributeNS(null, 'stroke-width', 2);
+            path.setAttributeNS(null, 'stroke-dasharray', [2, 8]);
+            svg.appendChild(path);
+          }
+        });
       }
 
     } // end of render()
