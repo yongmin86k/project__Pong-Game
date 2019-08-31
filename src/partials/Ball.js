@@ -50,9 +50,8 @@ export default class Ball {
     }
 
     wallCollision(){
-      // TODO :: Fix bug when it's equal to 0
-      const hitTop = this.y - this.radius <= 0;
-      const hitBottom = this.y + this.radius >= this.boardHeight;
+      const hitTop = this.y - this.radius < 0;
+      const hitBottom = this.y + this.radius > this.boardHeight;
       if (hitTop || hitBottom ){ this.vy *= -1; }
     }
 
