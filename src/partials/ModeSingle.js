@@ -1,6 +1,6 @@
 import { SVG_NS, KEYS } from "../settings";
 
-export default class SingleMode {
+export default class ModeSingle {
     constructor(boardWidth, boardHeight){
         this.x = boardWidth / 2;
         this.y = (boardHeight / 2) - 40;

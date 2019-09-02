@@ -21,7 +21,7 @@ export default class Paddle {
             this.keyState[event.keyCode] = true;
         });
         document.addEventListener('keyup', event => {
-            this.force = 0;
+            this.force = 0; 
             this.keyState[event.keyCode] = false;
         });
     } // end of constructor

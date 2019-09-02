@@ -67,7 +67,19 @@ Read more about the [Parcel web application bundler here](https://parceljs.org/)
 &nbsp;
 
 ---
-
+<!-- TO DO :: FEATURES
+1. select game mode oop
+2. flashing text
+3. key event
+4. rendering
+5. movements
+6. collision
+7. ball speed change
+8. ball size change
+9. ball add/remove
+10. paddle size change
+11. guideline
+ -->
 &nbsp;
 ## Game instructions
 

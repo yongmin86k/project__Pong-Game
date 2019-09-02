@@ -4,7 +4,7 @@ import Net from "./Net";
 import Paddle from "./Paddle";
 import Ball from "./Ball";
 import Score from "./Score";
-import SingleMode from "./SingleMode";
+import ModeSingle from "./ModeSingle";
 import Winner from "./Winner";
 import { SVG_NS, KEYS, PaddleOptions, BallOptions } from "../settings";
 
@@ -25,7 +25,7 @@ export default class Game {
     this.net = new Net(this.width, this.height);
 
     // create single-play mode notice
-    this.singlePlay = new SingleMode(this.width, this.height);
+    this.singlePlay = new ModeSingle(this.width, this.height);
 
     // create new paddles for the each players
     this.player1 = new Paddle(
@@ -215,7 +215,6 @@ export default class Game {
     
     this.ballSize = {};
     this.changeSize();
-    
   } // end of resetGame()
 
   render() {
@@ -255,7 +254,9 @@ export default class Game {
     // Render game contents
     if ( this.startPlay === true ){
       // Play single-player mode
-      if ( !this.isMulti ){ this.singlePlay.render(svg); }
+      if ( !this.isMulti ){ 
+        this.singlePlay.render(svg); 
+      }
       // Play muti-players mode
       else { 
         this.multiPlay(svg);
